@@ -224,13 +224,15 @@ d3.json("data.json", function(error, root) {
     })
 
     .attr("dy", function(d) {
-      var height = this.getBBox().height / 2;
-      console.log(height);
+      var rotation = computeTextRotation(d);
       if (d.depth == 3) {
         return ".35em";
+      } else if (d.depth == 2 && rotation > 90 && rotation < 135) {
+        return null;
       } else if (d.depth == 2) {
-        console.log(this.getBBox());
-        return height;
+        return ".75em";
+      } else if (d.depth == 1) {
+        return null;
       }
     })
 
