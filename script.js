@@ -56,8 +56,6 @@ var colors = {
 
 drawGraph();
 
-
-
 function drawGraph() {
 
 var pathText;
@@ -111,8 +109,6 @@ d3.json("data.json", function(error, root) {
     .each( function(d, i) {
 
       if (d.depth == 2) {
-
-
           var newArc = initialTextPos(d, this, 1.2);
 
           //Create a new invisible arc that the text can flow along
@@ -128,9 +124,6 @@ d3.json("data.json", function(error, root) {
           var pathText = svg.append("path")
             .attr("class", "hiddenArcSlices")
             .attr("id", "arc"+i)
-            // .attr("d", function(d) {
-            //   return "M -" + 161.25 + " 0 A 10 10 0 0 1 " + 161.25 + " 0";
-            // })
             .attr("d", newArc)
             .style("fill", "none")
             .style("stroke", "none");
@@ -257,14 +250,11 @@ d3.json("data.json", function(error, root) {
 
     function click(d) {
 
-      //  d == clicked element  //  !!!!
-
-
+      if (d.depth == 0 || d.depth == 3) {
+        return null;
+      }
 
       // fade out all text elements
-      //text.transition().style("fill", "rgba(0,0,0,0)");
-      //var allText = d3.select(this.parentNode).select("text");
-      //text.transition().style("fill", "rgba(0,0,0,1)");
       text.transition().style("opacity", "0");
 
 
@@ -276,11 +266,9 @@ d3.json("data.json", function(error, root) {
             if (e.x >= d.x && e.x < (d.x + d.dx)) {
               // get a selection of the associated text element
               var arcText = d3.select(this.parentNode).select("text");
-
               // fade in the text element and recalculate positions
               arcText.transition().duration(750)
                 .style("opacity", "1")
-                //.attr("transform", function() { return "rotate(" + computeTextRotation(e) + ")" })
                 .attr("transform", function(d) {
                   if (d.depth == 3) {
                     var rotation = computeTextRotation(d);
@@ -390,10 +378,7 @@ d3.json("data.json", function(error, root) {
                   var resize = resizeTextPath(e, elements, 1);
                   return resize;
                 } else if (d.depth == 1) {
-                  var resize = biggerTextPath(e, elementChildren, 1.33);
-                  return resize;
-                } else if (d.depth == 0) {
-                  var resize = biggerTextPath(e, elementChildren, 1.2);
+                  var resize = resizeTextPath(e, elementChildren, 1.33);
                   return resize;
                 }
               })
@@ -451,30 +436,25 @@ d3.json("data.json", function(error, root) {
     }
 
     if (d.depth == 1) {
-
+    
       var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
           middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 1 1 (.*?)A/; //Everything between the 0 0 1 and the end of the string (denoted by $)
+          endLoc    = /0 1 1 (.*?)A/, //Everything between the 0 0 1 and the end of the string (denoted by $)
+          startToSpace = /(.*?)\s/g,  //Everything between start and first space
+          spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
 
       // Split path in different sections
       var newStart = startLoc.exec( newArc )[1];
       var newEnd = endLoc.exec( newArc )[1];
       var middleSec = middleLoc.exec( newArc )[1];
 
-      //Everything between start and first space
-      var startPosX = /(.*?)\s/g;
-      var posX = startPosX.exec( newStart )[1];
+      var posX = startToSpace.exec( newStart )[1];
       posX = posX / size;
-
       if (posX > 0 && posX < 0.001) {
         posX = 0;
       }
 
-      // Everything from space and the end of the string
-      var startPosY = /\s(.*?)$/g;
-      var posY = startPosY.exec( newStart )[1];
       posY = position;
-
       if (posY < 0.001 && posY > 0) {
         posY = 0;
       }
@@ -484,22 +464,16 @@ d3.json("data.json", function(error, root) {
       middleStart = posX + " " + posY;
 
       //Everything between start and first space
-      var endPosX = /(.*?)\s/g;
-      var posX = endPosX.exec( newEnd )[1];
+      startToSpace.lastIndex = 0;
+      var posX = startToSpace.exec( newEnd )[1];
       posX = posX / size;
 
-      
-      // Everything from space and the end of the string
-      var endPosY = /\s(.*?)$/g;
-      var posY = endPosY.exec( newEnd )[1];
       posY = -position;
 
       // Put string back together
       newEnd = posX + " " + posY;
 
-      //Everything between start and first space
-      var beforeSpace = /(.*?)\s/g;
-      var radius = beforeSpace.exec( middleSec )[1];
+
       radius = position;
 
       // Put string back together
@@ -516,7 +490,9 @@ d3.json("data.json", function(error, root) {
 
       var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
           middleLoc   = /A(.*?)0 0 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 0 1 (.*?)$/; //Everything between the 0 0 1 and the end of the string (denoted by $)
+          endLoc    = /0 0 1 (.*?)$/, //Everything between the 0 0 1 and the end of the string (denoted by $)
+          startToSpace = /(.*?)\s/g,  //Everything between start and first space
+          spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
 
     }
 
@@ -527,8 +503,7 @@ d3.json("data.json", function(error, root) {
     var middleSec = middleLoc.exec( newArc )[1];
 
     //Everything between start and first space
-    var startPosX = /(.*?)\s/g;
-    var posX = startPosX.exec( newStart )[1];
+    var posX = startToSpace.exec( newStart )[1];
     posX = posX / size;
 
     if (posX > 0 && posX < 0.001) {
@@ -537,8 +512,7 @@ d3.json("data.json", function(error, root) {
 
     
     // Everything from space and the end of the string
-    var startPosY = /\s(.*?)$/g;
-    var posY = startPosY.exec( newStart )[1];
+    var posY = spaceToEnd.exec( newStart )[1];
     posY = posY / size;
 
     if (posY < 0.001 && posY > 0) {
@@ -549,22 +523,22 @@ d3.json("data.json", function(error, root) {
     newStart = posX + " " + posY;
 
     //Everything between start and first space
-    var endPosX = /(.*?)\s/g;
-    var posX = endPosX.exec( newEnd )[1];
+    startToSpace.lastIndex = 0;
+    var posX = startToSpace.exec( newEnd )[1];
     posX = posX / size;
 
     
     // Everything from space and the end of the string
-    var endPosY = /\s(.*?)$/g;
-    var posY = endPosY.exec( newEnd )[1];
+    spaceToEnd.lastIndex = 0;
+    var posY = spaceToEnd.exec( newEnd )[1];
     posY = posY / size;
 
     // Put string back together
     newEnd = posX + " " + posY;
 
     //Everything between start and first space
-    var beforeSpace = /(.*?)\s/g;
-    var radius = beforeSpace.exec( middleSec )[1];
+    startToSpace.lastIndex = 0;
+    var radius = startToSpace.exec( middleSec )[1];
     radius = position;
 
     // Put string back together
@@ -574,23 +548,16 @@ d3.json("data.json", function(error, root) {
     // Put whole string back together
     newArc = "M" + newStart + "A" + middleSec + "0 0 1 " + newEnd;
 
-
-
-
     //If the end angle lies beyond a quarter of a circle (90 degrees or pi/2) 
     //flip the end and start position
     var rotation = computeTextRotation(d);
     if (rotation > 90 && rotation < 135) {
-      var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-          middleLoc   = /A(.*?)0 0 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 0 1 (.*?)$/; //Everything between the 0 0 1 and the end of the string (denoted by $)
-
+      
       // Flip the direction of the arc by switching the start and end point (and sweep flag)
       var newStart = endLoc.exec( newArc )[1];
       var newEnd = startLoc.exec( newArc )[1];
       var middleSec = middleLoc.exec( newArc )[1];
       
-
       //Build up the new arc notation, set the sweep-flag to 0
       newArc = "M" + newStart + "A" + middleSec + "0 0 0 " + newEnd;
     }
@@ -618,22 +585,107 @@ d3.json("data.json", function(error, root) {
       newArc = d3.select(path).attr("d");
       var firstArcSection = /^.+?A(.+?)A/;
       newArc = firstArcSection.exec(d3.select(path).attr("d"));
+
       newArc = newArc[0];
+      console.log("resize", "null", newArc);
 
       var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-          middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 1 1 (.*?)A/; //Everything between the 0 0 1 and the end of the string (denoted by $)
+          middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 1 1
+          endLoc    = /0 1 1 (.*?)A/, //Everything between the 0 1 1 and the first A
+          startToSpace = /(.*?)\s/g,  //Everything between start and first space
+          spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
     } else {
+      console.log("resizeText newArc[1]", "else");
       newArc = newArc[1];
+      console.log(newArc);
 
-      var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-          middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 1 1 (.*?)$/; //Everything between the 0 0 1 and the end of the string (denoted by $)
+      var pattern = /0 1,1/;
+      var result = pattern.test(newArc);
+      console.log(newArc, result);
+
+      if (result == false) {
+        var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
+            middleLoc   = /A(.*?)0 0 1/,  //Everything between the capital A and 0 1 1
+            endLoc    = /0 0 1 (.*?)$/, //Everything between the 0 1 1 and the end of the string (denoted by $)
+            startToSpace = /(.*?)\s/g,  //Everything between start and first space
+            spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
+      } else if (result == true) {
+        var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
+            middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 1 1
+            endLoc    = /0 1 1 (.*?)$/, //Everything between the 0 1 1 and the end of the string (denoted by $)
+            startToSpace = /(.*?)\s/g,  //Everything between start and first space
+            spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
+      }
+
+
+      newArc = newArc.replace(/,/g , " ");
+
+      // Split path in different sections
+      var newStart = startLoc.exec( newArc )[1];
+      var newEnd = endLoc.exec( newArc )[1];
+      var middleSec = middleLoc.exec( newArc )[1];
+
+      //Everything between start and first space
+      var posX = startToSpace.exec( newStart )[1];
+      posX = posX / size;
+
+      if (posX > 0 && posX < 0.001) {
+        posX = 0;
+      }
+
+      // Everything from space and the end of the string
+      var posY = spaceToEnd.exec( newStart )[1];
+      posY = posY / size;
+
+      if (posY > 0 && posY < 0.001) {
+        posY = 0;
+      }
+
+      // Put string back together
+      newStart = posX + " " + posY;
+
+      //Everything between start and first space
+      startToSpace.lastIndex = 0;
+      var posX = startToSpace.exec( newEnd )[1];
+      posX = posX / size;
+
+
+      // Everything from space and the end of the string
+      spaceToEnd.lastIndex = 0;
+      var posY = spaceToEnd.exec( newEnd )[1];
+      posY = posY / size;
+
+      // Put string back together
+      newEnd = posX + " " + posY;
+
+      //Everything between start and first space
+      startToSpace.lastIndex = 0;
+      var radius = startToSpace.exec( middleSec )[1];
+      radius = radius / size;
+
+      // Put string back together
+      middleSec = radius + " " + radius + " ";
+
+      // Put whole string back together
+      newArc = "M" + newStart + "A" + middleSec + " 0 0 1 " + newEnd;
+
+      //If the end angle lies beyond a quarter of a circle (90 degrees or pi/2) 
+      //flip the end and start position
+      var rotation = computeTextRotation(d);
+      if (rotation > 90 && rotation < 135) {
+
+        // Flip the direction of the arc by switching the start and end point (and sweep flag)
+        var newStart = endLoc.exec( newArc )[1];
+        var newEnd = startLoc.exec( newArc )[1];
+        var middleSec = middleLoc.exec( newArc )[1];
+        
+        //Build up the new arc notation, set the sweep-flag to 0
+        newArc = "M" + newStart + "A" + middleSec + "0 0 0 " + newEnd;
+      }
+
+      return newArc;
+
     }
-
-
-
-    // var newArc = firstArcSection.exec(d3.select(path).attr("d"))[1];
     
     newArc = newArc.replace(/,/g , " ");
 
@@ -645,18 +697,13 @@ d3.json("data.json", function(error, root) {
 
 
     //Everything between start and first space
-    var startPosX = /(.*?)\s/g;
-    var posX = startPosX.exec( newStart )[1];
+    var posX = startToSpace.exec( newStart )[1];
     posX = posX / size;
 
     if (posX > 0 && posX < 0.001) {
       posX = 0;
     }
 
-    
-    // Everything from space and the end of the string
-    var startPosY = /\s(.*?)$/g;
-    var posY = startPosY.exec( newStart )[1];
     posY = position;
 
     if (posY > 0 && posY < 0.001) {
@@ -669,14 +716,10 @@ d3.json("data.json", function(error, root) {
     middleStart = posX + " " + posY;
 
     //Everything between start and first space
-    var endPosX = /(.*?)\s/g;
-    var posX = endPosX.exec( newEnd )[1];
+    startToSpace.lastIndex = 0;
+    var posX = startToSpace.exec( newEnd )[1];
     posX = posX / size;
 
-
-    // Everything from space and the end of the string
-    var endPosY = /\s(.*?)$/g;
-    var posY = endPosY.exec( newEnd )[1];
     posY = -position;
 
 
@@ -692,195 +735,11 @@ d3.json("data.json", function(error, root) {
     middleSec = radius + " " + radius + " ";
 
     // Put whole string back together
-    if (d.name == "Board of Directors") {
+    var rotation = computeTextRotation(d);
+    if (rotation > 90 && rotation < 135) {
       newArc = "M" + newStart + "A" + middleSec + " 0 0 0 " + middleStart + "A" + middleSec + " 0 0 0 " + newEnd;
     } else {
       newArc = "M" + newStart + "A" + middleSec + " 0 1 0 " + middleStart + "A" + middleSec + " 0 1 0 " + newEnd;
-    }
-
-    return newArc;
-
-  }
-
-
-  function biggerTextPath(d, path, size) {
-
-    var path = path;
-
-    var innerRadius = y(d.y);
-    var outerRadius = y(d.y + d.dy);
-
-    var position = innerRadius + (outerRadius - innerRadius) / 2;
-
-    //A regular expression that captures all in between the start of a string (denoted by ^) 
-    //and the first capital letter L
-    var firstArcSection = /(^.+?)L/;
-    var newArc = firstArcSection.exec(d3.select(path).attr("d"));
-
-
-    if (newArc == null) {
-
-      newArc = d3.select(path).attr("d");
-      var firstArcSection = /^.+?A(.+?)A/;
-      newArc = firstArcSection.exec(d3.select(path).attr("d"));
-      newArc = newArc[0];
-
-      var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-          middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 1 1 (.*?)A/; //Everything between the 0 0 1 and the end of the string (denoted by $)
-
-
-      newArc = newArc.replace(/,/g , " ");
-
-
-      // Split path in different sections
-      var newStart = startLoc.exec( newArc )[1];
-      var newEnd = endLoc.exec( newArc )[1];
-      var middleSec = middleLoc.exec( newArc )[1];
-
-
-      //Everything between start and first space
-      var startPosX = /(.*?)\s/g;
-      var posX = startPosX.exec( newStart )[1];
-      posX = posX / size;
-
-      if (posX > 0 && posX < 0.001) {
-        posX = 0;
-      }
-
-      
-      // Everything from space and the end of the string
-      var startPosY = /\s(.*?)$/g;
-      var posY = startPosY.exec( newStart )[1];
-      posY = position;
-
-      if (posY > 0 && posY < 0.001) {
-        posY = 0;
-      }
-
-
-      // Put string back together
-      newStart = posX + " " + (-posY);
-      middleStart = posX + " " + posY;
-
-      //Everything between start and first space
-      var endPosX = /(.*?)\s/g;
-      var posX = endPosX.exec( newEnd )[1];
-      posX = posX / size;
-
-
-      // Everything from space and the end of the string
-      var endPosY = /\s(.*?)$/g;
-      var posY = endPosY.exec( newEnd )[1];
-      posY = -position;
-
-
-      // Put string back together
-      newEnd = posX + " " + posY;
-
-      //Everything between start and first space
-      var beforeSpace = /(.*?)\s/g;
-      var radius = beforeSpace.exec( middleSec )[1];
-      radius = position;
-
-      // Put string back together
-      middleSec = radius + " " + radius + " ";
-
-      // Put whole string back together
-      newArc = "M" + newStart + "A" + middleSec + " 0 1 0 " + middleStart + "A" + middleSec + " 0 1 0 " + newEnd;
-
-
-      return newArc;
-
-    } else {
-
-      newArc = newArc[1];
-
-      var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-          middleLoc   = /A(.*?)0 0 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 0 1 (.*?)$/; //Everything between the 0 0 1 and the end of the string (denoted by $)
-    }
-
-
-
-    // var newArc = firstArcSection.exec(d3.select(path).attr("d"))[1];
-    
-    newArc = newArc.replace(/,/g , " ");
-
-
-    // Split path in different sections
-    var newStart = startLoc.exec( newArc )[1];
-    var newEnd = endLoc.exec( newArc )[1];
-    var middleSec = middleLoc.exec( newArc )[1];
-
-
-    //Everything between start and first space
-    var startPosX = /(.*?)\s/g;
-    var posX = startPosX.exec( newStart )[1];
-    posX = posX / size;
-
-    if (posX > 0 && posX < 0.001) {
-      posX = 0;
-    }
-
-    
-    // Everything from space and the end of the string
-    var startPosY = /\s(.*?)$/g;
-    var posY = startPosY.exec( newStart )[1];
-    posY = posY / size;
-
-    if (posY > 0 && posY < 0.001) {
-      posY = 0;
-    }
-
-
-    // Put string back together
-    newStart = posX + " " + posY;
-    // middleStart = posX + " " + posY;
-
-    //Everything between start and first space
-    var endPosX = /(.*?)\s/g;
-    var posX = endPosX.exec( newEnd )[1];
-    posX = posX / size;
-
-
-    // Everything from space and the end of the string
-    var endPosY = /\s(.*?)$/g;
-    var posY = endPosY.exec( newEnd )[1];
-    posY = posY / size;
-
-
-    // Put string back together
-    newEnd = posX + " " + posY;
-
-    //Everything between start and first space
-    var beforeSpace = /(.*?)\s/g;
-    var radius = beforeSpace.exec( middleSec )[1];
-    radius = radius / size;
-
-    // Put string back together
-    middleSec = radius + " " + radius + " ";
-
-    // Put whole string back together
-    newArc = "M" + newStart + "A" + middleSec + " 0 0 1 " + newEnd;
-
-
-    //If the end angle lies beyond a quarter of a circle (90 degrees or pi/2) 
-    //flip the end and start position
-    var rotation = computeTextRotation(d);
-    if (rotation > 90 && rotation < 135) {
-      var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-          middleLoc   = /A(.*?)0 0 1/,  //Everything between the capital A and 0 0 1
-          endLoc    = /0 0 1 (.*?)$/; //Everything between the 0 0 1 and the end of the string (denoted by $)
-
-      // Flip the direction of the arc by switching the start and end point (and sweep flag)
-      var newStart = endLoc.exec( newArc )[1];
-      var newEnd = startLoc.exec( newArc )[1];
-      var middleSec = middleLoc.exec( newArc )[1];
-      
-
-      //Build up the new arc notation, set the sweep-flag to 0
-      newArc = "M" + newStart + "A" + middleSec + "0 0 0 " + newEnd;
     }
 
     return newArc;
