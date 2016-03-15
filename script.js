@@ -10,7 +10,7 @@ var y = d3.scale.linear()
 
 var colors = {
   "data": "#000000",
-  "solid": "#831751",
+  "solid": "#00C4FF",
   "group": "#FFA25E",
   "platform": "#47A1F0",
   "program": "#E5B931",
@@ -21,32 +21,32 @@ var colors = {
   "end": "#bbbbbb",
   // people
  "Jorge Quiroz": "#79C546",
- "Alvaro Amorrortu": "#79C546",
- "Tayjus Surampudi": "#79C546",
- "Gaelyn Flannery": "#79C546",
- "Annie Ganot": "#79C546",
- "VallKopp Aharonov": "#79C546",
- "Christianne Baruqui": "#79C546",
- "Karin Folman": "#79C546",
- "Kerry Rosenfeld": "#79C546",
- "Carl Morris": "#79C546",
- "Joel Schneider": "#79C546",
- "Ilan Ganot": "#79C546",
- "Robbie Huffines": "#79C546",
- "Andrey Zarur": "#79C546",
- "Matt Arnold": "#79C546",
- "Gilad Hayeem": "#79C546",
+ "Alvaro Amorrortu": "#00C4FF",
+ "Tayjus Surampudi": "#00C4FF",
+ "Gaelyn Flannery": "#00C4FF",
+ "Annie Ganot": "#00C4FF",
+ "VallKopp Aharonov": "#00C4FF",
+ "Christianne Baruqui": "#00C4FF",
+ "Karin Folman": "#00C4FF",
+ "Kerry Rosenfeld": "#00C4FF",
+ "Carl Morris": "#00C4FF",
+ "Joel Schneider": "#00C4FF",
+ "Ilan Ganot": "#45C26B",
+ "Robbie Huffines": "#45C26B",
+ "Andrey Zarur": "#45C26B",
+ "Matt Arnold": "#45C26B",
+ "Gilad Hayeem": "#45C26B",
    // company
-  "Perceptive": "#F7798A",
-  "JP Morgan": "#F7798A",
-  "SRI": "#F7798A",
-  "Pfizer": "#F7798A",
-  "Debiopharm": "#F7798A",
+  "Perceptive": "#FFCE00",
+  "JP Morgan": "#FFCE00",
+  "SRI": "#FFCE00",
+  "Pfizer": "#FFCE00",
+  "Debiopharm": "#FFCE00",
    // groups
-  "Team": "#FFA25E",
-  "Board of Directors": "#FFA25E",
+  "Team": "#00C4FF",
+  "Board of Directors": "#45C26B",
   "Investors": "#FFA25E",
-  "Partners": "#FFA25E", 
+  "Partners": "#FFCE00", 
   // academies
   "U Penn": "#A87BD9",
   "Univ of Missouri": "#A87BD9"
@@ -74,10 +74,31 @@ var partition = d3.layout.partition()
 var arc = d3.svg.arc()
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
     .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
-    .innerRadius(function(d) { return Math.max(0, y(d.y)); })
+    .innerRadius(function(d) {
+      if (d.depth == 1) {
+        return 80;
+      } else if (d.depth == 2) {
+        return 180;
+      } else if(d.depth == 3) {
+        return 300;
+      } else if (d.depth == 4) {
+        return 500
+      }
+
+      else {
+        return Math.max(0, y(d.y));
+      }
+    })
     .outerRadius(function(d) { 
       if (d.depth == 3)
+        return 500;
+      else if (d.depth == 1) {
+        return 180;
+      } else if(d.depth == 2) {
+        return 300;
+      } else if (d.depth == 4) {
         return 600;
+      }
       else
         return Math.max(0, y(d.y + d.dy)); 
     });
@@ -98,18 +119,24 @@ d3.json("data.json", function(error, root) {
         // Make inner circle transparent
         return "rgba(0, 0, 0, 0)"
       } else {
-        return colors[d.name]; }
+        return "#ffffff" }
       })
     .attr('id', function(d) {
       return "path" + d.id;
     })
-    .style("stroke", "#fff")
+    .style("stroke", function(d) {
+      // return colors[d.name];
+      if (d.depth == 0) {
+        return "none";
+      } else 
+      return "#D7D7D7";
+    })
     //animation onClick
     .on("click", click)
     .each( function(d, i) {
 
       if (d.depth == 2) {
-          var newArc = initialTextPos(d, this, 1.2);
+          var newArc = initialTextPos(d, this, 1.25);
 
           //Create a new invisible arc that the text can flow along
           var pathText = svg.append("path")
@@ -117,7 +144,7 @@ d3.json("data.json", function(error, root) {
             .attr("id", "arc"+i)
             .attr("d", newArc)
             .style("fill", "none")
-            .style("stroke", "none");
+            .style("stroke", "#none");
 
         } else if (d.depth == 1) {
           var newArc = initialTextPos(d, this, 1);
@@ -148,7 +175,9 @@ d3.json("data.json", function(error, root) {
       }
     })
     // adjust textcolor
-    .attr("fill", "#ffffff")
+    .style("fill", function(d) {
+      return colors[d.name];
+    })
     // Hide text from innerRing
     .style("display", function(d) {
       if (d.depth == 0) {
@@ -195,9 +224,9 @@ d3.json("data.json", function(error, root) {
       if (d.depth == 3) {
         var rotation = computeTextRotation(d);
         if (rotation > 90) {
-          return -1 * y(d.y);
+          return -1 * 300;
         }
-        return y(d.y);
+        return 300;
       } else {
         return null;
       }
@@ -257,7 +286,6 @@ d3.json("data.json", function(error, root) {
       // fade out all text elements
       text.transition().style("opacity", "0");
 
-
       path.transition()
         .duration(750)
         .attrTween("d", arcTween(d))
@@ -267,7 +295,7 @@ d3.json("data.json", function(error, root) {
               // get a selection of the associated text element
               var arcText = d3.select(this.parentNode).select("text");
               // fade in the text element and recalculate positions
-              arcText.transition().duration(750)
+              arcText.transition().duration(0)
                 .style("opacity", "1")
                 .attr("transform", function(d) {
                   if (d.depth == 3) {
@@ -276,7 +304,6 @@ d3.json("data.json", function(error, root) {
 
                     if (rotation > 90) {
                       var angle = (d.x + d.dx / 2) * 180 / Math.PI - 90;
-                      // d.y plus variable !!!
                       transformation = "rotate(" + computeTextRotation(d) + ")rotate(-180)";
                     }
                     return transformation;
@@ -297,34 +324,19 @@ d3.json("data.json", function(error, root) {
                 })
                 .attr("x", function(e) {
                   var rotation = computeTextRotation(e);
-
-                  if (d.depth == 3) {
-                    return y(d.y);
-                  } else if (d.depth == 3 && rotation > 90) {
-                    return -1 * y(d.y);
-                  }
-
                   if (d.depth == 2) {
                     if (e.depth == 3 && rotation > 90) {
-                      return -260;
+                      return -300;
                     } else if (e.depth == 3) {
-                      return 260;
+                      return 300;
                     }
                   }
 
                   if (d.depth == 1) {
                     if (e.depth == 3 && rotation > 90) {
-                      return -340;
+                      return -300;
                     } else if (e.depth == 3) {
-                      return 340;
-                    }
-                  }
-
-                  if (d.depth == 0) {
-                    if (e.depth == 3 && rotation > 90) {
-                      return -375;
-                    } else if (e.depth == 3) {
-                      return 375;
+                      return 300;
                     }
                   }
                 })
@@ -366,7 +378,7 @@ d3.json("data.json", function(error, root) {
 
               var pathText = d3.select('#arc' + i);
 
-              pathText.transition().duration(750)
+              pathText.transition().duration(0)
               .attr("d", function() {
                 elements = d3.select('#path' + d.id);
                 elements = elements[0][0];
@@ -378,10 +390,14 @@ d3.json("data.json", function(error, root) {
                   var resize = resizeTextPath(e, elements, 1);
                   return resize;
                 } else if (d.depth == 1) {
-                  var resize = resizeTextPath(e, elementChildren, 1.33);
+                  var resize = resizeTextPath(e, elementChildren, 1.25);
                   return resize;
                 }
               })
+            } else if (e.depth == 1) {
+              var arcText = d3.select(this.parentNode).select("text");
+              arcText.transition().duration(0)
+                .style("opacity", "1");
             }
         });
     }
@@ -409,8 +425,19 @@ d3.json("data.json", function(error, root) {
   function initialTextPos(d, path, size) {
     var path = path;
 
-    var innerRadius = y(d.y);
-    var outerRadius = y(d.y + d.dy);
+    // var innerRadius = y(d.y);
+    // var outerRadius = y(d.y + d.dy);
+
+    if (d.depth == 1) {
+      var innerRadius = 80;
+      var outerRadius = 180;
+    } else if(d.depth == 2) {
+      var innerRadius = 180;
+      var outerRadius = 300;
+    } else if(d.depth == 3) {
+      var innerRadius = 300;
+      var outerRadius = 500;
+    }
 
     var position = innerRadius + (outerRadius - innerRadius) / 2;
 
@@ -570,8 +597,16 @@ d3.json("data.json", function(error, root) {
 
     var path = path;
 
-    var innerRadius = y(d.y);
-    var outerRadius = y(d.y + d.dy);
+    if (d.depth == 1) {
+      var innerRadius = 80;
+      var outerRadius = 180;
+    } else if(d.depth == 2) {
+      var innerRadius = 180;
+      var outerRadius = 300;
+    } else if(d.depth == 3) {
+      var innerRadius = 300;
+      var outerRadius = 500;
+    }
 
     var position = innerRadius + (outerRadius - innerRadius) / 2;
 
@@ -587,7 +622,6 @@ d3.json("data.json", function(error, root) {
       newArc = firstArcSection.exec(d3.select(path).attr("d"));
 
       newArc = newArc[0];
-      console.log("resize", "null", newArc);
 
       var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
           middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 1 1
@@ -595,13 +629,10 @@ d3.json("data.json", function(error, root) {
           startToSpace = /(.*?)\s/g,  //Everything between start and first space
           spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
     } else {
-      console.log("resizeText newArc[1]", "else");
       newArc = newArc[1];
-      console.log(newArc);
 
       var pattern = /0 1,1/;
       var result = pattern.test(newArc);
-      console.log(newArc, result);
 
       if (result == false) {
         var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
