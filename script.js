@@ -135,6 +135,8 @@
         })
         //animation onClick
         .on("click", click)
+        .on("mouseover", mouseover)
+        .on("mouseleave", mouseleave)
         .each( function(d, i) {
 
           if (d.depth == 2) {
@@ -280,8 +282,54 @@
         })
         ;
 
-      
 
+        function mouseover(d) {
+
+          var thisObject = d;
+          var objectsArray = [];
+          var colorArray = [];
+
+          while (thisObject.parent != null) {
+            objectsArray.push(thisObject);
+            thisObject = thisObject.parent;
+          }
+
+          for (var i = 0; i < objectsArray.length; i++) {
+            // console.log(objectsArray[i]);
+            var currentPath = d3.select("#path" + objectsArray[i].id);
+            // console.log(currentPath);
+            currentPath.style('stroke', function() {
+              return colors[d.name];
+            });
+            currentPath.style('stroke-width', function() {
+              return '3';
+            })
+          }
+        }
+
+        function mouseleave(d) {
+
+          var thisObject = d;
+          var objectsArray = [];
+          var colorArray = [];
+
+          while (thisObject.parent != null) {
+            objectsArray.push(thisObject);
+            thisObject = thisObject.parent;
+          }
+
+          for (var i = 0; i < objectsArray.length; i++) {
+            // console.log(objectsArray[i]);
+            var currentPath = d3.select("#path" + objectsArray[i].id);
+            // console.log(currentPath);
+            currentPath.style('stroke', function() {
+              return '#D7D7D7';
+            });
+            currentPath.style('stroke-width', function() {
+              return '1';
+            })
+          }
+        }
 
         function click(d) {
 
