@@ -62,7 +62,7 @@
 
     var pathText;
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select(Drupal.settings.solidbio.organisationalchart.selector).append("svg")
         .attr("width", width)
         .attr("height", height)
         .attr("class", "#solidbio-graph")
