@@ -60,10 +60,10 @@ function drawGraph() {
 
 var pathText;
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("Drupal.settings.solidbio.organisationalchart.selector").append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr("class", "graph")
+    .attr("class", "#solidbio-graph")
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")");
 
@@ -82,7 +82,7 @@ var arc = d3.svg.arc()
       } else if(d.depth == 3) {
         return 300;
       } else if (d.depth == 4) {
-        return 500
+        return 550
       }
 
       else {
@@ -91,7 +91,7 @@ var arc = d3.svg.arc()
     })
     .outerRadius(function(d) { 
       if (d.depth == 3)
-        return 500;
+        return 550;
       else if (d.depth == 1) {
         return 180;
       } else if(d.depth == 2) {
@@ -436,7 +436,7 @@ d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) 
       var outerRadius = 300;
     } else if(d.depth == 3) {
       var innerRadius = 300;
-      var outerRadius = 500;
+      var outerRadius = 550;
     }
 
     var position = innerRadius + (outerRadius - innerRadius) / 2;
@@ -605,7 +605,7 @@ d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) 
       var outerRadius = 300;
     } else if(d.depth == 3) {
       var innerRadius = 300;
-      var outerRadius = 500;
+      var outerRadius = 550;
     }
 
     var position = innerRadius + (outerRadius - innerRadius) / 2;
@@ -614,7 +614,6 @@ d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) 
     //and the first capital letter L
     var firstArcSection = /(^.+?)L/;
     var newArc = firstArcSection.exec(d3.select(path).attr("d"));
-
 
     if (newArc == null) {
       newArc = d3.select(path).attr("d");
