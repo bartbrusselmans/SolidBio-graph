@@ -295,15 +295,23 @@
           }
 
           for (var i = 0; i < objectsArray.length; i++) {
-            // console.log(objectsArray[i]);
             var currentPath = d3.select("#path" + objectsArray[i].id);
-            // console.log(currentPath);
-            currentPath.style('stroke', function() {
-              return colors[d.name];
-            });
-            currentPath.style('stroke-width', function() {
-              return '3';
-            })
+            currentPath.transition().duration(250)
+              .style('stroke', function() {
+                return colors[d.name];
+              })
+              .style('stroke-width', function() {
+                return '5';
+              })
+          }
+
+          // var test = d3.select("#path" + objectsArray[1].id);
+          // console.log(test[0][0].parentNode);
+
+          for (var i = 0; i < objectsArray.length; i++) {
+            var currentPath = d3.select("#path" + objectsArray[i].id);
+            var objectToMove = currentPath[0][0].parentNode;
+            $( objectToMove ).insertBefore( $( "#arc1" ) );
           }
         }
 
@@ -319,15 +327,14 @@
           }
 
           for (var i = 0; i < objectsArray.length; i++) {
-            // console.log(objectsArray[i]);
             var currentPath = d3.select("#path" + objectsArray[i].id);
-            // console.log(currentPath);
-            currentPath.style('stroke', function() {
-              return '#D7D7D7';
-            });
-            currentPath.style('stroke-width', function() {
-              return '1';
-            })
+            currentPath.transition().duration(250)
+              .style('stroke', function() {
+                return '#D7D7D7';
+              })
+              .style('stroke-width', function() {
+                return '1';
+              })
           }
         }
 
