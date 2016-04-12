@@ -424,20 +424,29 @@
                       }
                     })
                     .each( function(e) {
-                      console.log(d.name);
+                      // console.log(d.name);
                       if (d.depth == 1) {
                         if (e.depth == 2) {
                           test = $("#path" + e.id).parent().find("text");
-                          console.log(test);
                           var textWidth = test.width();
-                          console.log("width = ", textWidth);
                     
                           if (textWidth > 150) {
 
                             var arr = e.name.split(" ");
+                            console.log(arr);
+
+                            var half = arr.length / 2;
+                            var lineOne = arr.slice(0, Math.ceil(half));
+                            var lineTwo = arr.slice(Math.ceil(half), arr.length);
+
+                            lineOne = lineOne.join(' ');
+                            lineTwo = lineTwo.join(' ');
+
+                            arr = [lineOne, lineTwo];
+
                             var group = $("#path" + e.id).parent().find("text");
-                              console.log("group", group);
-                              $( group ).empty();
+                            $( group ).empty();
+
                             for (var i = 0; i < arr.length; i++) {
                               
                               d3.select(this).append("tspan")
