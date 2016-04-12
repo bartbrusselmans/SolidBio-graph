@@ -1,8 +1,8 @@
 (function($) {
   $(function() {
-    var width = 1200,
-        height = 1200,
-        radius = 500;
+    var width = 900,
+        height = 900,
+        radius = 300;
 
     var x = d3.scale.linear()
         .range([0, 2 * Math.PI]);
@@ -10,49 +10,51 @@
     var y = d3.scale.linear()
         .range([0, radius]);
 
-    var colors = {
-      "data": "#000000",
-      "solid": "#00C4FF",
-      "group": "#FFA25E",
-      "platform": "#47A1F0",
-      "program": "#E5B931",
-      "people": "#79C546",
-      "company": "#F7798A",
-      "academy": "#A87BD9",
-      "charity": "#00C9CB",
-      "end": "#bbbbbb",
-      // people
-     "Jorge Quiroz": "#79C546",
-     "Alvaro Amorrortu": "#00C4FF",
-     "Tayjus Surampudi": "#00C4FF",
-     "Gaelyn Flannery": "#00C4FF",
-     "Annie Ganot": "#00C4FF",
-     "VallKopp Aharonov": "#00C4FF",
-     "Christianne Baruqui": "#00C4FF",
-     "Karin Folman": "#00C4FF",
-     "Kerry Rosenfeld": "#00C4FF",
-     "Carl Morris": "#00C4FF",
-     "Joel Schneider": "#00C4FF",
-     "Ilan Ganot": "#45C26B",
-     "Robbie Huffines": "#45C26B",
-     "Andrey Zarur": "#45C26B",
-     "Matt Arnold": "#45C26B",
-     "Gilad Hayeem": "#45C26B",
-       // company
-      "Perceptive": "#FFCE00",
-      "JP Morgan": "#FFCE00",
-      "SRI": "#FFCE00",
-      "Pfizer": "#FFCE00",
-      "Debiopharm": "#FFCE00",
-       // groups
-      "Team": "#00C4FF",
-      "Board of Directors": "#45C26B",
-      "Investors": "#FFA25E",
-      "Partners": "#FFCE00", 
-      // academies
-      "U Penn": "#A87BD9",
-      "Univ of Missouri": "#A87BD9"
-    };
+    // var colors = {
+    //   "data": "#000000",
+    //   "solid": "#00C4FF",
+    //   "group": "#FFA25E",
+    //   "platform": "#47A1F0",
+    //   "program": "#E5B931",
+    //   "people": "#79C546",
+    //   "company": "#F7798A",
+    //   "academy": "#A87BD9",
+    //   "charity": "#00C9CB",
+    //   "end": "#bbbbbb",
+    //   // people
+    //  "Jorge Quiroz": "#79C546",
+    //  "Alvaro Amorrortu": "#00C4FF",
+    //  "Tayjus Surampudi": "#00C4FF",
+    //  "Gaelyn Flannery": "#00C4FF",
+    //  "Annie Ganot": "#00C4FF",
+    //  "VallKopp Aharonov": "#00C4FF",
+    //  "Christianne Baruqui": "#00C4FF",
+    //  "Karin Folman": "#00C4FF",
+    //  "Kerry Rosenfeld": "#00C4FF",
+    //  "Carl Morris": "#00C4FF",
+    //  "Joel Schneider": "#00C4FF",
+    //  "Ilan Ganot": "#45C26B",
+    //  "Robbie Huffines": "#45C26B",
+    //  "Andrey Zarur": "#45C26B",
+    //  "Matt Arnold": "#45C26B",
+    //  "Gilad Hayeem": "#45C26B",
+    //    // company
+    //   "Perceptive": "#FFCE00",
+    //   "JP Morgan": "#FFCE00",
+    //   "SRI": "#FFCE00",
+    //   "Pfizer": "#FFCE00",
+    //   "Debiopharm": "#FFCE00",
+    //    // groups
+    //   "Team": "#00C4FF",
+    //   "Board of Directors": "#45C26B",
+    //   "Investors": "#FFA25E",
+    //   "Partners": "#FFCE00", 
+    //   // academies
+    //   "U Penn": "#A87BD9",
+    //   "Univ of Missouri": "#A87BD9"
+    // };
+
+    var color = '#ff6d53';
 
 
 
@@ -77,31 +79,27 @@
         .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
         .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
         .innerRadius(function(d) {
-          if (d.depth == 1) {
-            return 80;
-          } else if (d.depth == 2) {
-            return 180;
-          } else if(d.depth == 3) {
-            return 300;
-          } else if (d.depth == 4) {
-            return 550
-          }
+          // if (d.depth == 1) {
+          //   return 0;
+          // } else if (d.depth == 2) {
+          //   return 150;
+          // } else if(d.depth == 3) {
+          //   return 300;
+          // }
 
-          else {
+          // else {
             return Math.max(0, y(d.y));
-          }
+          // }
         })
         .outerRadius(function(d) { 
-          if (d.depth == 3)
-            return 550;
-          else if (d.depth == 1) {
-            return 180;
-          } else if(d.depth == 2) {
-            return 300;
-          } else if (d.depth == 4) {
-            return 600;
-          }
-          else
+          // if (d.depth == 3)
+          //   return 400; // original 550
+          // else if (d.depth == 1) {
+          //   return 150;
+          // } else if(d.depth == 2) {
+          //   return 300;
+          // }
+          // else
             return Math.max(0, y(d.y + d.dy)); 
         });
 
@@ -139,8 +137,8 @@
         .on("mouseleave", mouseleave)
         .each( function(d, i) {
 
-          if (d.depth == 2) {
-              var newArc = initialTextPos(d, this, 1.25);
+          if (d.depth == 1) {
+              var newArc = resizeTextPath(d, this, 1.25);
 
               //Create a new invisible arc that the text can flow along
               var pathText = svg.append("path")
@@ -148,16 +146,16 @@
                 .attr("id", "arc"+i)
                 .attr("d", newArc)
                 .style("fill", "none")
-                .style("stroke", "#none");
-
-            } else if (d.depth == 1) {
-              var newArc = initialTextPos(d, this, 1);
-              var pathText = svg.append("path")
-                .attr("class", "hiddenArcSlices")
-                .attr("id", "arc"+i)
-                .attr("d", newArc)
-                .style("fill", "none")
                 .style("stroke", "none");
+
+            // } else if (d.depth == 1) {
+            //   var newArc = initialTextPos(d, this, 1);
+            //   var pathText = svg.append("path")
+            //     .attr("class", "hiddenArcSlices")
+            //     .attr("id", "arc"+i)
+            //     .attr("d", newArc)
+            //     .style("fill", "none")
+            //     .style("stroke", "none");
             }
         });
 
@@ -168,19 +166,19 @@
       var text = g.append("text")
         // Give unique classes to every ring
         .attr("class", function(d) {
-          if (d.depth == 0) {
-            return "data";
-          } else if (d.depth == 1) {
+          // if (d.depth == 0) {
+          //   return "data";
+          /*} else*/ if (d.depth == 0) {
             return "solid";
-          } else if (d.depth == 2) {
+          } else if (d.depth == 1) {
             return "innerRing";
-          } else if (d.depth == 3) {
+          } else if (d.depth == 2) {
             return "outerRing";
           }
         })
         // adjust textcolor
         .style("fill", function(d) {
-          return colors[d.name];
+          return color;
         })
         // Hide text from innerRing
         .style("display", function(d) {
@@ -190,7 +188,7 @@
         })
 
         .style("text-anchor", function(d) {
-          if (d.depth == 3) {
+          if (d.depth == 2) {
             var rotation = computeTextRotation(d);
             if (rotation > 90) {
               return "end";
@@ -202,16 +200,29 @@
           }
         })
 
+
+
+        //  NAMES ON OUTER CIRCLE
         .text(function(d) {
-          if (d.depth == 3)
-            return d.name; 
+          if (d.depth == 2) {
+            // test = $("#path" + d.id).parent().find("text");
+            // console.log(test);
+
+            // var textWidth = test.width();
+            // console.log(textWidth);
+            // var n=(d.name||"").split(" ").length>1
+            // console.log(n);
+            // n = d.name.split(" ");
+            // console.log(n);
+            return d.name;
+          }
           else
             return null;
-        })
+        })    
 
         // Rotation for the outerRing text that is over 90 degrees
         .attr("transform", function(d) {
-          if (d.depth == 3) {
+          if (d.depth == 2) {
             var rotation = computeTextRotation(d);
             var transformation = "rotate(" + computeTextRotation(d) + ")";
             if (rotation > 90) {
@@ -225,12 +236,12 @@
          })
 
         .attr("x", function(d) {
-          if (d.depth == 3) {
+          if (d.depth == 2) {
             var rotation = computeTextRotation(d);
             if (rotation > 90) {
-              return -1 * 300;
+              return -1 * 200;
             }
-            return 300;
+            return 200;
           } else {
             return null;
           }
@@ -238,7 +249,7 @@
 
         // Adjust margin
         .attr("dx", function(d) {
-          if (d.depth == 3) {
+          if (d.depth == 2) {
             var rotation = computeTextRotation(d);
             if (rotation > 90) {
               return -20;
@@ -251,13 +262,13 @@
 
         .attr("dy", function(d) {
           var rotation = computeTextRotation(d);
-          if (d.depth == 3) {
+          if (d.depth == 2) {
             return ".35em";
-          } else if (d.depth == 2 && rotation > 90 && rotation < 135) {
+          } else if (d.depth == 1 && rotation > 45 && rotation < 180) {
             return null;
-          } else if (d.depth == 2) {
-            return ".75em";
           } else if (d.depth == 1) {
+            return ".75em";
+          } else if (d.depth == 0) {
             return null;
           }
         })
@@ -265,7 +276,7 @@
         // Place text on path
         var textPaths = text.append("textPath")
         .attr("xlink:href", function(d, i) {
-          if (d.depth == 3) {
+          if (d.depth == 2) {
             return null;
           }
           return "#arc" + i;
@@ -274,7 +285,7 @@
         .attr("startOffset", "50%")  
 
         .text(function(d) {
-          if (d.depth == 3) {
+          if (d.depth == 2) {
             return null;
           } else {
            return d.name;
@@ -284,6 +295,11 @@
 
 
         function mouseover(d) {
+
+          var title = document.getElementById('group');
+          var content = d.name;
+          title.innerHTML = content;
+        
 
           var thisObject = d;
           var objectsArray = [];
@@ -298,10 +314,10 @@
             var currentPath = d3.select("#path" + objectsArray[i].id);
             currentPath.transition().duration(250)
               .style('stroke', function() {
-                return colors[d.name];
+                return color;
               })
               .style('stroke-width', function() {
-                return '5';
+                return '3';
               })
           }
 
@@ -313,9 +329,16 @@
             var objectToMove = currentPath[0][0].parentNode;
             $( objectToMove ).insertBefore( $( "#arc1" ) );
           }
+
+          
         }
 
         function mouseleave(d) {
+
+          var title = document.getElementById('group');
+          var content = "Solid Organogram";
+          title.innerHTML = content;
+          
 
           var thisObject = d;
           var objectsArray = [];
@@ -338,19 +361,42 @@
           }
         }
 
-        function click(d) {
+        document.getElementById("button").onclick = function () {
+          var solid = d3.select("#path2").data()[0];
+          click(solid);
+        };
 
-          if (d.depth == 0 || d.depth == 3) {
-            return null;
-          }
+        function click(d) {
 
           // fade out all text elements
           text.transition().style("opacity", "0");
+
+          path.on("mouseover", null)
+            .on("mouseleave", null);
+
+          if (d.depth == 2) {
+            return null;
+          } else if (d.depth == 1) {
+            $("#button").css("visibility", "visible");
+            $("#button").css("opacity", "1");
+            $("#button").css("transition", "visibility 1.5s, opacity 1.5s linear");
+            $("#button-wrapper").css("z-index", "5");
+          } else if (d.depth == 0) {
+            $("#button").css("visibility", "hidden");
+            $("#button").css("opacity", "0");
+            $("#button").css("transition", "visibility 0s, opacity 0s linear");
+            $("#button-wrapper").css("z-index", "-10");
+          }
+          // console.log(d);
+
+          
+
 
           path.transition()
             .duration(750)
             .attrTween("d", arcTween(d))
             .each("end", function(e, i) {
+
                 // check if the animated element's data e lies within the visible angle span given in d
                 if (e.x >= d.x && e.x < (d.x + d.dx)) {
                   // get a selection of the associated text element
@@ -359,7 +405,7 @@
                   arcText.transition().duration(0)
                     .style("opacity", "1")
                     .attr("transform", function(d) {
-                      if (d.depth == 3) {
+                      if (d.depth == 2) {
                         var rotation = computeTextRotation(d);
                         var transformation = "rotate(" + computeTextRotation(d) + ")";
 
@@ -373,65 +419,62 @@
                         return null;
                       }
                     })
-                    .style("text-anchor", function(d) {
-                      var rotation = computeTextRotation(d);
-                      if (d.depth == 3 && rotation > 90) {
+
+
+                    .style("text-anchor", function(e) {
+                      var rotation = computeTextRotation(e);
+                      if (e.depth == 2 && rotation > 90) {
                         return "end";
-                      } else if (d.depth == 3) {
+                      } else if (e.depth == 2) {
                         return "start";
-                      } else {
+                      } else if (d.depth == 1) {
+                        return "middle";
+                      } else if (d.depth == 0) {
                         return "middle";
                       }
                     })
                     .attr("x", function(e) {
                       var rotation = computeTextRotation(e);
-                      if (d.depth == 2) {
-                        if (e.depth == 3 && rotation > 90) {
-                          return -300;
-                        } else if (e.depth == 3) {
-                          return 300;
-                        }
+                      if (d.depth == 1) {
+                        if (e.depth == 2 && rotation > 90) {
+                          return -y(d.y + d.dy);
+                        } else if (e.depth == 2) {
+                          return y(d.y + d.dy);
+                        } 
                       }
 
-                      if (d.depth == 1) {
-                        if (e.depth == 3 && rotation > 90) {
+                      if (d.depth == 0) {
+                        if (e.depth == 2 && rotation > 90) {
                           return -300;
-                        } else if (e.depth == 3) {
+                        } else if (e.depth == 2) {
                           return 300;
                         }
                       }
                     })
 
+                    
 
                     .attr("dx", function(e) {
                       var rotation = computeTextRotation(e);
                       
-                      if (d.depth == 3) {
+                      if (d.depth == 2) {
                         return 20;
-                      } else if (d.depth == 3 && rotation > 90) {
+                      } else if (d.depth == 2 && rotation > 90) {
                         return -20;
                       }
 
-                      if (d.depth == 2) {
-                        if (e.depth == 3 && rotation > 90) {
-                          return -20;
-                        } else if (e.depth == 3) {
-                          return 20;
-                        }
-                      }
-
                       if (d.depth == 1) {
-                        if (e.depth == 3 && rotation > 90) {
+                        if (e.depth == 2 && rotation > 90) {
                           return -20;
-                        } else if (e.depth == 3) {
+                        } else if (e.depth == 2) {
                           return 20;
                         }
                       }
 
                       if (d.depth == 0) {
-                        if (e.depth == 3 && rotation > 90) {
+                        if (e.depth == 2 && rotation > 90) {
                           return -20;
-                        } else if (e.depth == 3) {
+                        } else if (e.depth == 2) {
                           return 20;
                         }
                       }
@@ -446,21 +489,74 @@
                     elementChildren = d3.select('#path' + e.id);
                     elementChildren = elementChildren[0][0];
 
+                    if (d.depth == 1) {
+                      // var resize = resizeTextPath(e, elements, 1);
+                      // return resize;
 
-                    if (d.depth == 2) {
-                      var resize = resizeTextPath(e, elements, 1);
-                      return resize;
-                    } else if (d.depth == 1) {
+                      // var text = $("#path" + d.id).parent().find("text");
+                      // console.log(text);
+
+                      // var textpath = $(text).find("textpath");
+                      // console.log(textpath);
+
+                      return "M-200 0L200 0";
+
+                    } else if (d.depth == 0) {
                       var resize = resizeTextPath(e, elementChildren, 1.25);
                       return resize;
                     }
                   })
-                } else if (e.depth == 1) {
+                } else if (e.depth == 0) {
                   var arcText = d3.select(this.parentNode).select("text");
                   arcText.transition().duration(0)
                     .style("opacity", "1");
                 }
             });
+
+            if (d.depth == 1) {
+              text.style("font-size", function(d) {
+                if (d.depth == 2) {
+                  return "1em";
+                } else if (d.depth == 1) {
+                  return "1.5em";
+                }
+              })
+            } else if (d.depth == 0) {
+              text.style("font-size", function(d) {
+                if (d.depth == 2) {
+                  return 0;
+                }
+              })
+            }
+
+            // text.text(function(d) {
+            //   test = $("#path" + d.id).parent().find("text");
+            //   // console.log(test);
+
+            //   var textWidth = test.width();
+            //   console.log("width = ", textWidth);
+            //   var n=(d.name||"").split(" ").length>1
+            //   // console.log(n);
+            //   n = d.name.split(" ");
+            //   console.log(n);
+            //   return d.name;
+
+            // })
+
+            setTimeout(function(){ 
+              path.on("mouseover", mouseover)
+                  .on("mouseleave", mouseleave); 
+            }, 1000);
+
+            // for (var i = 0; i < d.children.length; i++) {
+            //   id = d.children[i].id;
+
+            //   text = $("#path" + id).parent().find("text");
+            //   console.log(text);
+
+            //   var textWidth = $(text).width();
+            //   console.log(textWidth);
+            // }
         }
       });
 
@@ -468,13 +564,25 @@
 
       // Interpolate the scales!
       function arcTween(d) {
-        var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);   // [0, 1] [startAngle, endAngle]
+
+        if (d.depth == 1) {
+          var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);   // [0, 1] [startAngle, endAngle]
             yd = d3.interpolate(y.domain(), [d.y, 1]);    // [0, 1] [0 || 0.25 || 0.5 || 0.75, 1]
-            yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);   // [0, 500] [20, 500]
+            yr = d3.interpolate(y.range(), [d.y ? 0 : 0, radius + 100]);   // [0, 500] [20, 500]
+          } else if (d.depth == 0) {
+            var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);   // [0, 1] [startAngle, endAngle]
+              yd = d3.interpolate(y.domain(), [d.y, 1]);    // [0, 1] [0 || 0.25 || 0.5 || 0.75, 1]
+              yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);   // [0, 500] [20, 500]
+          }
+
         return function(d, i) {
           return i
               ? function(t) { return arc(d); }
-              : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
+              : function(t) { 
+                x.domain(xd(t)); 
+                y.domain(yd(t)).range(yr(t)); 
+                return arc(d); 
+              };
         };
       }
 
@@ -483,191 +591,184 @@
         return (x(d.x + d.dx / 2) - Math.PI / 2) / Math.PI * 180;
       }
 
-      function initialTextPos(d, path, size) {
-        var path = path;
+      // function initialTextPos(d, path, size) {
+      //   var path = path;
 
-        // var innerRadius = y(d.y);
-        // var outerRadius = y(d.y + d.dy);
+      //   var innerRadius = y(d.y);
+      //   var outerRadius = y(d.y + d.dy);
 
-        if (d.depth == 1) {
-          var innerRadius = 80;
-          var outerRadius = 180;
-        } else if(d.depth == 2) {
-          var innerRadius = 180;
-          var outerRadius = 300;
-        } else if(d.depth == 3) {
-          var innerRadius = 300;
-          var outerRadius = 550;
-        }
+      //   // if (d.depth == 0) {
+      //   //   var innerRadius = 80;
+      //   //   var outerRadius = 180;
+      //   // } else if(d.depth == 1) {
+      //   //   var innerRadius = 180;
+      //   //   var outerRadius = 300;
+      //   // } else if(d.depth == 2) {
+      //   //   var innerRadius = 300;
+      //   //   var outerRadius = 550;
+      //   // }
 
-        var position = innerRadius + (outerRadius - innerRadius) / 2;
+      //   var position = innerRadius + (outerRadius - innerRadius) / 2;
 
-        //A regular expression that captures all in between the start of a string (denoted by ^) 
-        //and the first capital letter L
-        var firstArcSection = /(^.+?)L/;
+      //   //A regular expression that captures all in between the start of a string (denoted by ^) 
+      //   //and the first capital letter L
+      //   var firstArcSection = /(^.+?)L/;
 
-        //The [1] gives back the expression between the () (thus not the L as well) 
-        //which is exactly the arc statement
-        var newArc = firstArcSection.exec(d3.select(path).attr("d"));
+      //   //The [1] gives back the expression between the () (thus not the L as well) 
+      //   //which is exactly the arc statement
+      //   var newArc = firstArcSection.exec(d3.select(path).attr("d"));
 
-        if (newArc && newArc.length > 0) {
-          newArc = newArc[1];
+      //   if (newArc && newArc.length > 0) {
+      //     newArc = newArc[1];
 
-          //Replace all the comma's so that IE can handle it -_-
-          //The g after the / is a modifier that "find all matches rather than stopping after the first match"
-          newArc = newArc.replace(/,/g , " ");
+      //     //Replace all the comma's so that IE can handle it -_-
+      //     //The g after the / is a modifier that "find all matches rather than stopping after the first match"
+      //     newArc = newArc.replace(/,/g , " ");
 
 
-        } else {
-          newArc = d3.select(path).attr("d");
-          newArc = newArc.replace(/,/g , " ");
-        }
+      //   } else {
+      //     newArc = d3.select(path).attr("d");
+      //     newArc = newArc.replace(/,/g , " ");
+      //   }
 
-        if (d.depth == 1) {
+      //   if (d.depth == 0) {
         
-          var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-              middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 0 1
-              endLoc    = /0 1 1 (.*?)A/, //Everything between the 0 0 1 and the end of the string (denoted by $)
-              startToSpace = /(.*?)\s/g,  //Everything between start and first space
-              spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
+      //     var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
+      //         middleLoc   = /A(.*?)0 1 1/,  //Everything between the capital A and 0 0 1
+      //         endLoc    = /0 1 1 (.*?)A/, //Everything between the 0 0 1 and the end of the string (denoted by $)
+      //         startToSpace = /(.*?)\s/g,  //Everything between start and first space
+      //         spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
 
-          // Split path in different sections
-          var newStart = startLoc.exec( newArc )[1];
-          var newEnd = endLoc.exec( newArc )[1];
-          var middleSec = middleLoc.exec( newArc )[1];
+      //     // Split path in different sections
+      //     var newStart = startLoc.exec( newArc )[1];
+      //     var newEnd = endLoc.exec( newArc )[1];
+      //     var middleSec = middleLoc.exec( newArc )[1];
 
-          var posX = startToSpace.exec( newStart )[1];
-          posX = posX / size;
-          if (posX > 0 && posX < 0.001) {
-            posX = 0;
-          }
+      //     var posX = startToSpace.exec( newStart )[1];
+      //     posX = posX / size;
+      //     if (posX > 0 && posX < 0.001) {
+      //       posX = 0;
+      //     }
 
-          posY = position;
-          if (posY < 0.001 && posY > 0) {
-            posY = 0;
-          }
+      //     posY = position;
+      //     if (posY < 0.001 && posY > 0) {
+      //       posY = 0;
+      //     }
 
-          // Put string back together
-          newStart = posX + " " + (-posY);
-          middleStart = posX + " " + posY;
+      //     // Put string back together
+      //     newStart = posX + " " + (-posY);
+      //     middleStart = posX + " " + posY;
 
-          //Everything between start and first space
-          startToSpace.lastIndex = 0;
-          var posX = startToSpace.exec( newEnd )[1];
-          posX = posX / size;
+      //     //Everything between start and first space
+      //     startToSpace.lastIndex = 0;
+      //     var posX = startToSpace.exec( newEnd )[1];
+      //     posX = posX / size;
 
-          posY = -position;
+      //     posY = -position;
 
-          // Put string back together
-          newEnd = posX + " " + posY;
+      //     // Put string back together
+      //     newEnd = posX + " " + posY;
 
 
-          radius = position;
+      //     radius = position;
 
-          // Put string back together
-          middleSec = radius + " " + radius + " ";
+      //     // Put string back together
+      //     middleSec = radius + " " + radius + " ";
           
 
-          // Put whole string back together
-          newArc = "M" + newStart + "A" + middleSec + " 0 1 0 " + middleStart + "A" + middleSec + " 0 1 0 " + newEnd;
+      //     // Put whole string back together
+      //     newArc = "M" + newStart + "A" + middleSec + " 0 1 0 " + middleStart + "A" + middleSec + " 0 1 0 " + newEnd;
 
-          return newArc;
-
-
-        } else {
-
-          var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
-              middleLoc   = /A(.*?)0 0 1/,  //Everything between the capital A and 0 0 1
-              endLoc    = /0 0 1 (.*?)$/, //Everything between the 0 0 1 and the end of the string (denoted by $)
-              startToSpace = /(.*?)\s/g,  //Everything between start and first space
-              spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
-
-        }
+      //     return newArc;
 
 
-        // Split path in different sections
-        var newStart = startLoc.exec( newArc )[1];
-        var newEnd = endLoc.exec( newArc )[1];
-        var middleSec = middleLoc.exec( newArc )[1];
+      //   } else {
 
-        //Everything between start and first space
-        var posX = startToSpace.exec( newStart )[1];
-        posX = posX / size;
+      //     var startLoc  = /M(.*?)A/,    //Everything between the capital M and first capital A
+      //         middleLoc   = /A(.*?)0 0 1/,  //Everything between the capital A and 0 0 1
+      //         endLoc    = /0 0 1 (.*?)$/, //Everything between the 0 0 1 and the end of the string (denoted by $)
+      //         startToSpace = /(.*?)\s/g,  //Everything between start and first space
+      //         spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
 
-        if (posX > 0 && posX < 0.001) {
-          posX = 0;
-        }
+      //   }
 
-        
-        // Everything from space and the end of the string
-        var posY = spaceToEnd.exec( newStart )[1];
-        posY = posY / size;
 
-        if (posY < 0.001 && posY > 0) {
-          posY = 0;
-        }
+      //   // Split path in different sections
+      //   var newStart = startLoc.exec( newArc )[1];
+      //   var newEnd = endLoc.exec( newArc )[1];
+      //   var middleSec = middleLoc.exec( newArc )[1];
 
-        // Put string back together
-        newStart = posX + " " + posY;
+      //   //Everything between start and first space
+      //   var posX = startToSpace.exec( newStart )[1];
+      //   posX = posX / size;
 
-        //Everything between start and first space
-        startToSpace.lastIndex = 0;
-        var posX = startToSpace.exec( newEnd )[1];
-        posX = posX / size;
+      //   if (posX > 0 && posX < 0.001) {
+      //     posX = 0;
+      //   }
 
         
-        // Everything from space and the end of the string
-        spaceToEnd.lastIndex = 0;
-        var posY = spaceToEnd.exec( newEnd )[1];
-        posY = posY / size;
+      //   // Everything from space and the end of the string
+      //   var posY = spaceToEnd.exec( newStart )[1];
+      //   posY = posY / size;
 
-        // Put string back together
-        newEnd = posX + " " + posY;
+      //   if (posY < 0.001 && posY > 0) {
+      //     posY = 0;
+      //   }
 
-        //Everything between start and first space
-        startToSpace.lastIndex = 0;
-        var radius = startToSpace.exec( middleSec )[1];
-        radius = position;
+      //   // Put string back together
+      //   newStart = posX + " " + posY;
 
-        // Put string back together
-        middleSec = radius + " " + radius + " ";
+      //   //Everything between start and first space
+      //   startToSpace.lastIndex = 0;
+      //   var posX = startToSpace.exec( newEnd )[1];
+      //   posX = posX / size;
+
+        
+      //   // Everything from space and the end of the string
+      //   spaceToEnd.lastIndex = 0;
+      //   var posY = spaceToEnd.exec( newEnd )[1];
+      //   posY = posY / size;
+
+      //   // Put string back together
+      //   newEnd = posX + " " + posY;
+
+      //   //Everything between start and first space
+      //   startToSpace.lastIndex = 0;
+      //   var radius = startToSpace.exec( middleSec )[1];
+      //   radius = position;
+
+      //   // Put string back together
+      //   middleSec = radius + " " + radius + " ";
         
 
-        // Put whole string back together
-        newArc = "M" + newStart + "A" + middleSec + "0 0 1 " + newEnd;
+      //   // Put whole string back together
+      //   newArc = "M" + newStart + "A" + middleSec + "0 0 1 " + newEnd;
 
-        //If the end angle lies beyond a quarter of a circle (90 degrees or pi/2) 
-        //flip the end and start position
-        var rotation = computeTextRotation(d);
-        if (rotation > 90 && rotation < 135) {
+      //   //If the end angle lies beyond a quarter of a circle (90 degrees or pi/2) 
+      //   //flip the end and start position
+      //   var rotation = computeTextRotation(d);
+      //   if (rotation > 90 && rotation < 135) {
           
-          // Flip the direction of the arc by switching the start and end point (and sweep flag)
-          var newStart = endLoc.exec( newArc )[1];
-          var newEnd = startLoc.exec( newArc )[1];
-          var middleSec = middleLoc.exec( newArc )[1];
+      //     // Flip the direction of the arc by switching the start and end point (and sweep flag)
+      //     var newStart = endLoc.exec( newArc )[1];
+      //     var newEnd = startLoc.exec( newArc )[1];
+      //     var middleSec = middleLoc.exec( newArc )[1];
           
-          //Build up the new arc notation, set the sweep-flag to 0
-          newArc = "M" + newStart + "A" + middleSec + "0 0 0 " + newEnd;
-        }
+      //     //Build up the new arc notation, set the sweep-flag to 0
+      //     newArc = "M" + newStart + "A" + middleSec + "0 0 0 " + newEnd;
+      //   }
 
-        return newArc;
+      //   return newArc;
 
-      }
+      // }
 
       function resizeTextPath(d, path, size) {
 
         var path = path;
 
-        if (d.depth == 1) {
-          var innerRadius = 80;
-          var outerRadius = 180;
-        } else if(d.depth == 2) {
-          var innerRadius = 180;
-          var outerRadius = 300;
-        } else if(d.depth == 3) {
-          var innerRadius = 300;
-          var outerRadius = 550;
-        }
+        var innerRadius = y(d.y);
+        var outerRadius = y(d.y + d.dy);
+
 
         var position = innerRadius + (outerRadius - innerRadius) / 2;
 
@@ -763,7 +864,7 @@
           //If the end angle lies beyond a quarter of a circle (90 degrees or pi/2) 
           //flip the end and start position
           var rotation = computeTextRotation(d);
-          if (rotation > 90 && rotation < 135) {
+          if (rotation > 45 && rotation < 180) {
 
             // Flip the direction of the arc by switching the start and end point (and sweep flag)
             var newStart = endLoc.exec( newArc )[1];
@@ -778,62 +879,62 @@
 
         }
         
-        newArc = newArc.replace(/,/g , " ");
+        // newArc = newArc.replace(/,/g , " ");
 
 
-        // Split path in different sections
-        var newStart = startLoc.exec( newArc )[1];
-        var newEnd = endLoc.exec( newArc )[1];
-        var middleSec = middleLoc.exec( newArc )[1];
+        // // Split path in different sections
+        // var newStart = startLoc.exec( newArc )[1];
+        // var newEnd = endLoc.exec( newArc )[1];
+        // var middleSec = middleLoc.exec( newArc )[1];
 
 
-        //Everything between start and first space
-        var posX = startToSpace.exec( newStart )[1];
-        posX = posX / size;
+        // //Everything between start and first space
+        // var posX = startToSpace.exec( newStart )[1];
+        // posX = posX / size;
 
-        if (posX > 0 && posX < 0.001) {
-          posX = 0;
-        }
+        // if (posX > 0 && posX < 0.001) {
+        //   posX = 0;
+        // }
 
-        posY = position;
+        // posY = position;
 
-        if (posY > 0 && posY < 0.001) {
-          posY = 0;
-        }
-
-
-        // Put string back together
-        newStart = posX + " " + (-posY);
-        middleStart = posX + " " + posY;
-
-        //Everything between start and first space
-        startToSpace.lastIndex = 0;
-        var posX = startToSpace.exec( newEnd )[1];
-        posX = posX / size;
-
-        posY = -position;
+        // if (posY > 0 && posY < 0.001) {
+        //   posY = 0;
+        // }
 
 
-        // Put string back together
-        newEnd = posX + " " + posY;
+        // // Put string back together
+        // newStart = posX + " " + (-posY);
+        // middleStart = posX + " " + posY;
 
-        //Everything between start and first space
-        var beforeSpace = /(.*?)\s/g;
-        var radius = beforeSpace.exec( middleSec )[1];
-        radius = position;
+        // //Everything between start and first space
+        // startToSpace.lastIndex = 0;
+        // var posX = startToSpace.exec( newEnd )[1];
+        // posX = posX / size;
 
-        // Put string back together
-        middleSec = radius + " " + radius + " ";
+        // posY = -position;
 
-        // Put whole string back together
-        var rotation = computeTextRotation(d);
-        if (rotation > 90 && rotation < 135) {
-          newArc = "M" + newStart + "A" + middleSec + " 0 0 0 " + middleStart + "A" + middleSec + " 0 0 0 " + newEnd;
-        } else {
-          newArc = "M" + newStart + "A" + middleSec + " 0 1 0 " + middleStart + "A" + middleSec + " 0 1 0 " + newEnd;
-        }
 
-        return newArc;
+        // // Put string back together
+        // newEnd = posX + " " + posY;
+
+        // //Everything between start and first space
+        // var beforeSpace = /(.*?)\s/g;
+        // var radius = beforeSpace.exec( middleSec )[1];
+        // radius = position;
+
+        // // Put string back together
+        // middleSec = radius + " " + radius + " ";
+
+        // // Put whole string back together
+        // var rotation = computeTextRotation(d);
+        // if (rotation > 90 && rotation < 135) {
+        //   newArc = "M" + newStart + "A" + middleSec + " 0 0 0 " + middleStart + "A" + middleSec + " 0 0 0 " + newEnd;
+        // } else {
+        //   newArc = "M" + newStart + "A" + middleSec + " 0 1 0 " + middleStart + "A" + middleSec + " 0 1 0 " + newEnd;
+        // }
+
+        // return newArc;
 
       }
     }

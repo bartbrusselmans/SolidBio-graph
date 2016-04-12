@@ -18,10 +18,8 @@ form {
 }
 
 #solidbio-graph {
-  transform: scale(0.7);
-  -webkit-transform: scale(0.7);
-  -moz-transform: scale(0.7);
-  -webkit-transform-origin: left top;
+  position: relative;
+  left: -50%;
 }
 
 path {
@@ -39,13 +37,14 @@ path {
 .innerRing {
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 .outerRing {
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.2em;
+  /*font-size: 1.2em;*/
+  font-size: 0;
 }
 
 .data {
@@ -57,20 +56,79 @@ path {
 .solid {
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.5em;
+  font-size: 0;
+  /*font-size: 1.5em;*/
 }
 
 text {
   pointer-events: none;
 }
 
+#organogram-info {
+  float: left;
+  /*margin-left: 40%;*/
+}
+
+.hidden-path {
+  opacity: 0;
+}
+
+.logo {
+  display: block;
+  margin: auto;
+  transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+}
+
+#button-wrapper {
+  z-index: -10;
+}
+
+#button {
+    background-color: #ffffff;
+    border: 1px solid #ff6d53;
+    border-radius: 12px;
+    color: #ff6d53;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 1.5s, opacity 1.5s linear;
+}
+
+#button-wrapper {
+  position: relative;
+  top: -400px;
+  left: -40px;
+}
+
 
 </style>
-<div id="solidbio-graph">
-  <form>
-    <label><input type="radio" name="mode" value="size"> Size</label>
-    <label><input type="radio" name="mode" value="count" checked> Count</label>
-  </form>
+
+<div style="position: absolute; left:50%;">
+  <div style="position:relative; left:-50%; top:475px;">
+    <img class="logo" src="img/logo.svg" alt="logo">
+  </div>
+    <div id="solidbio-graph">
+    <!-- <form>
+      <label><input type="radio" name="mode" value="size"> Size</label>
+      <label><input type="radio" name="mode" value="count" checked> Count</label>
+    </form> -->
+  </div>
+  <div id="button-wrapper">
+    <button id="button" type="button">Back</button>
+  </div>
+</div>
+
+
+
+<div id="organogram-info">
+  <h1 id="group">Solid Organogram</h1>
+  <p>Click around to explore our organizational structure.</p>
 </div>
 <script type="text/javascript" src="d3/d3.min.js"></script>
 <!-- <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script> -->

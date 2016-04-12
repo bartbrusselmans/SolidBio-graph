@@ -1,7 +1,4 @@
-{
-	"name": "data",
-	"id": 1,
-	"children": [
+
 	{
 		"name": "solid",
 		"id": 2,
@@ -10,52 +7,76 @@
 			"name": "Team",
 			"id": 3,
 			"children": [
-				{"name": "Alvaro Amorrortu", "size": "1", "id": 7},
-				{"name": "Tayjus Surampudi", "size": "1", "id": 8},
-				{"name": "Gaelyn Flannery", "size": "1", "id": 9},
-				{"name": "Annie Ganot", "size": "1", "id": 10},
-				{"name": "VallKopp Aharonov", "size": "1", "id": 11},
-				{"name": "Christianne Baruqui", "size": "1", "id": 12},
-				{"name": "Karin Folman", "size": "1", "id": 13},
-				{"name": "Kerry Rosenfeld", "size": "1", "id": 14},
-				{"name": "Carl Morris", "size": "1", "id": 15},
-				{"name": "Joel Schneider", "size": "1", "id": 16}
+				{"name": "Alvaro Amorrortu", "size": "1", "id": 9},
+				{"name": "Tayjus Surampudi", "size": "1", "id": 10},
+				{"name": "Gaelyn Flannery", "size": "1", "id": 11},
+				{"name": "Annie Ganot", "size": "1", "id": 12},
+				{"name": "VallKopp Aharonov", "size": "1", "id": 13},
+				{"name": "Christianne Baruqui", "size": "1", "id": 14},
+				{"name": "Karin Folman", "size": "1", "id": 15},
+				{"name": "Kerry Rosenfeld", "size": "1", "id": 16},
+				{"name": "Carl Morris", "size": "1", "id": 17},
+				{"name": "Joel Schneider", "size": "1", "id": 18}
 			]
 		},
 
 		{
-			"name": "Board of Directors",
+			"name": "BOD",
 			"id": 4,
 			"children": [
-				{"name": "Ilan Ganot", "size": "1", "id": 17},
-				{"name": "Robbie Huffines", "size": "1", "id": 18},
-				{"name": "Andrey Zarur", "size": "1", "id": 19},
-				{"name": "Matt Arnold", "size": "1", "id": 20},
-				{"name": "Gilad Hayeem", "size": "1", "id": 21}
+				{"name": "Ilan Ganot", "size": "1", "id": 19},
+				{"name": "Andrey Zarur", "size": "1", "id": 20},
+				{"name": "Robbie Huffines", "size": "1", "id": 21},
+				{"name": "Matt Arnold", "size": "1", "id": 22},
+				{"name": "Gilad Hayeem", "size": "1", "id": 23}
 			]
 		},
 
 		{
-			"name": "Investors",
+			"name": "Solid Fellows",
 			"id": 5,
 			"children": [
-				{"name": "Perceptive", "size": "1", "id": 22},
-				{"name": "JP Morgan", "size": "1", "id": 23}
+				{"name": "Katrin Hollinger", "size": "1", "id": 24},
+				{"name": "JP Morgan", "size": "1", "id": 25}
 			]
 		},
 
 		{
-			"name": "Partners",
+			"name": "SAB",
 			"id": 6,
 			"children": [
-				{"name": "SRI", "size": "1", "id": 24},
-				{"name": "Pfizer", "size": "1", "id": 25},
-				{"name": "Debiopharm", "size": "1", "id": 26},
-				{"name": "U Penn", "size": "1", "id": 27},
-				{"name": "Univ of Missouri", "size": "1", "id": 28}
+				{"name": "James M. Wilson M.D., Ph.D", "size": "1", "id": 26},
+				{"name": "Pfizer", "size": "1", "id": 27},
+				{"name": "Debiopharm", "size": "1", "id": 28},
+				{"name": "U Penn", "size": "1", "id": 29},
+				{"name": "Univ of Missouri", "size": "1", "id": 30}
+			]
+		},
+
+		{
+			"name": "R&D Partners",
+			"id": 7,
+			"children": [
+				{"name": "Perelman School of medicine", "size": "1", "id": 31},
+				{"name": "Pfizer", "size": "1", "id": 32},
+				{"name": "Debiopharm", "size": "1", "id": 33},
+				{"name": "U Penn", "size": "1", "id": 34},
+				{"name": "Univ of Missouri", "size": "1", "id": 35}
+			]
+		},
+
+		{
+			"name": "Charity Partners",
+			"id": 8,
+			"children": [
+				{"name": "Parent Project Muscular Dystrophy", "size": "1", "id": 36},
+				{"name": "Pfizer", "size": "1", "id": 37},
+				{"name": "Debiopharm", "size": "1", "id": 38},
+				{"name": "U Penn", "size": "1", "id": 39},
+				{"name": "Univ of Missouri", "size": "1", "id": 40}
 			]
 		}
+
+
 		]
 	}
-	]
-}
