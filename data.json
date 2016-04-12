@@ -7,7 +7,7 @@
 			"name": "Team",
 			"id": 3,
 			"children": [
-				{"name": "Alvaro Amorrortu", "size": "1", "id": 9},
+				{"name": "Alvaro\nAmorrortu", "size": "1", "id": 9},
 				{"name": "Tayjus Surampudi", "size": "1", "id": 10},
 				{"name": "Gaelyn Flannery", "size": "1", "id": 11},
 				{"name": "Annie Ganot", "size": "1", "id": 12},
@@ -33,7 +33,7 @@
 		},
 
 		{
-			"name": "Solid Fellows",
+			"name": "Solid\nFellows",
 			"id": 5,
 			"children": [
 				{"name": "Katrin Hollinger", "size": "1", "id": 24},

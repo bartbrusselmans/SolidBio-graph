@@ -10,6 +10,8 @@
     var y = d3.scale.linear()
         .range([0, radius]);
 
+    var bounds = d3.select("path.arcSlices");
+
     // var colors = {
     //   "data": "#000000",
     //   "solid": "#00C4FF",
@@ -218,7 +220,9 @@
           }
           else
             return null;
-        })    
+        })
+
+         
 
         // Rotation for the outerRing text that is over 90 degrees
         .attr("transform", function(d) {
@@ -419,6 +423,56 @@
                         return null;
                       }
                     })
+                    .each( function(e) {
+                      console.log(d.name);
+                      if (d.depth == 1) {
+                        if (e.depth == 2) {
+                          test = $("#path" + e.id).parent().find("text");
+                          console.log(test);
+                          var textWidth = test.width();
+                          console.log("width = ", textWidth);
+                    
+                          if (textWidth > 150) {
+
+                            var arr = e.name.split(" ");
+                            var group = $("#path" + e.id).parent().find("text");
+                              console.log("group", group);
+                              $( group ).empty();
+                            for (var i = 0; i < arr.length; i++) {
+                              
+                              d3.select(this).append("tspan")
+                                .text(arr[i])
+                                .attr("dy", i ? "1.2em" : 0)
+                                .attr("x", function(d) {
+                                  var rotation = computeTextRotation(d);
+                                  // console.log(d, rotation);
+                                  if (rotation > 90) {
+                                    return i ? -220 : 200
+                                  } else {
+                                    return i ? 220 : 200
+                                  }
+                                })
+                                .attr("text-anchor", function(d) {
+                                  var rotation = computeTextRotation(d);
+                                  if (rotation > 90) {
+                                    return "end"
+                                  } else {
+                                    return "start"
+                                  }
+                                })
+                                .attr("class", "tspan" + i);
+                            };
+                          }
+                        }
+                      } else if (d.depth == 0) {
+                        if (e.depth == 2) {
+                          // var arr = e.name.split(" ");
+                          // for (var i = 0; i < arr.length; i++) {
+                          //   d3.select(this).remove("tspan");
+                          // }
+                        }
+                      }
+                    }) 
 
 
                     .style("text-anchor", function(e) {
