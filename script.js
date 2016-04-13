@@ -110,6 +110,11 @@
         .style("fill", function(d) {
           return color;
         })
+        .style("opacity", function(d) {
+          if (d.depth == 2) {
+            return 0;
+          }
+        })
         .style("pointer-events", function(d) {
           if (d.depth == 2) {
             return null
@@ -295,11 +300,7 @@
 
         function click(d) {
 
-          // fade out all text elements
-          text.transition().style("opacity", "0");
-
-          path.on("mouseover", null)
-            .on("mouseleave", null);
+          
 
           if (d.depth == 1) {
             $("#button").css("visibility", "visible");
@@ -312,8 +313,14 @@
             $("#button").css("transition", "visibility 0s, opacity 0s linear");
             $("#button-wrapper").css("z-index", "-10");
           } else if (d.depth == 2) {
-            return null
+            return false;
           }
+
+          // fade out all text elements
+          text.transition().style("opacity", "0");
+
+          path.on("mouseover", null)
+            .on("mouseleave", null);
 
         
           path.transition()
@@ -327,7 +334,17 @@
                   var arcText = d3.select(this.parentNode).select("text");
                   // fade in the text element and recalculate positions
                   arcText.transition().duration(0)
-                    .style("opacity", "1")
+                    .style("opacity", function(e) {
+                      if (d.depth == 1) {
+                        if (e.depth == 2) {
+                          return 1
+                        }
+                      } else if (d.depth == 0) {
+                        if (e.depth == 2) {
+                          return 0;
+                        }
+                      }
+                    })
                     .attr("transform", function(d) {
                       if (d.depth == 2) {
                         var rotation = computeTextRotation(d);
@@ -477,26 +494,26 @@
                     .style("opacity", "1");
                 }
             });
-
-            if (d.depth == 1) {
-              text.style("font-size", function(d) {
-                if (d.depth == 2) {
-                  return "1em";
-                } else if (d.depth == 1) {
-                  return "1.5em";
-                }
-              })
-            } else if (d.depth == 0) {
-              text.style("font-size", function(d) {
-                if (d.depth == 2) {
-                  return 0;
-                }
-              })
-            }
+            
+            // if (d.depth == 1) {
+            //   text.style("font-size", function(d) {
+            //     if (d.depth == 2) {
+            //       return "1em";
+            //     } else if (d.depth == 1) {
+            //       return "1.5em";
+            //     }
+            //   })
+            // } else if (d.depth == 0) {
+            //   text.style("font-size", function(d) {
+            //     if (d.depth == 2) {
+            //       return 0;
+            //     }
+            //   })
+            // }
 
             setTimeout(function(){ 
               path.on("mouseover", mouseover)
-                  .on("mouseleave", mouseleave); 
+                  .on("mouseleave", mouseleave);
             }, 1000);
 
         }
