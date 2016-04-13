@@ -1,0 +1,98 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 100%;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+#solidbio-graph {
+  position: relative;
+  left: -50%;
+  font-size: 18px !important;
+}
+
+path {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+.line {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1.5px;
+}
+
+.innerRing {
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+}
+
+.outerRing {
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+}
+
+.data {
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+}
+
+.solid {
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0;
+}
+
+#organogram-info {
+  float: left;
+}
+
+.hidden-path {
+  opacity: 0;
+}
+
+.logo {
+  display: block;
+  margin: auto;
+  transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+}
+
+#button-wrapper {
+  z-index: -10;
+  width: 82px;
+}
+
+#button {
+    background-color: #ffffff;
+    border: 1px solid #ff6d53;
+    border-radius: 5px;
+    color: #ff6d53;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 1.5s, opacity 1.5s linear;
+}
+
+#button-wrapper {
+  position: relative;
+  top: -400px;
+  left: -30px;
+}

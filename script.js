@@ -113,7 +113,7 @@
         })
         .style("pointer-events", function(d) {
           if (d.depth == 2) {
-            return null
+            return 'auto';
           } else {
             return "none";
           }
