@@ -10,8 +10,6 @@
     var y = d3.scale.linear()
         .range([0, radius]);
 
-    var bounds = d3.select("path.arcSlices");
-
     var color = '#ff6d53';
 
     drawGraph();
@@ -30,19 +28,16 @@
     var partition = d3.layout.partition()
         .value(function(d) {return d.size;});
 
-
     var arc = d3.svg.arc()
         .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
         .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
         .innerRadius(function(d) { return Math.max(0, y(d.y)); })
         .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
-
     d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) {
       var g = svg.selectAll("g")
         .data(partition.nodes(root))
         .enter().append("g");
-
 
     // Draw arcs
       var path = g.append("path")
@@ -71,27 +66,28 @@
         .each( function(d, i) {
 
           if (d.depth == 1) {
-              var newArc = resizeTextPath(d, this, 1.25);
 
-              //Create a new invisible arc that the text can flow along
-              var pathText = svg.append("path")
-                .attr("class", "hiddenArcSlices")
-                .attr("id", "arc"+i)
-                .attr("d", newArc)
-                .style("fill", "none")
-                .style("stroke", "none");
+            var newArc = resizeTextPath(d, this, 1.25);
+
+            //  Create a new invisible arc that the text can flow along
+            var pathText = svg.append("path")
+              .attr("class", "hiddenArcSlices")
+              .attr("id", "arc"+i)
+              .attr("d", newArc)
+              .style("fill", "none")
+              .style("stroke", "none");
             }
         });
 
-
-    var links = g.append("a")
-      .attr("xlink:href", function(d) {
-        if (d.depth == 2) {
-          return "http://www.google.com"
-        } else {
-          return null
-        }
-      });
+        //  Append a elements so labels on outer rings are clickable
+        var links = g.append("a")
+          .attr("xlink:href", function(d) {
+            if (d.depth == 2) {
+              return "http://www.google.com"
+            } else {
+              return null
+            }
+          });
 
 
     // Draw text
@@ -142,8 +138,6 @@
           }
         })
 
-
-
         //  NAMES ON OUTER CIRCLE
         .text(function(d) {
           if (d.depth == 2) {
@@ -152,8 +146,6 @@
           else
             return null;
         })
-
-         
 
         // Rotation for the outerRing text that is over 90 degrees
         .attr("transform", function(d) {
@@ -256,6 +248,8 @@
               })
           }
 
+          //  Move object and his parents that you're hovering over to the end of html so it lies on top of the rest and
+          //  is fully visible.
           for (var i = 0; i < objectsArray.length; i++) {
             var currentPath = d3.select("#path" + objectsArray[i].id);
             var objectToMove = currentPath[0][0].parentNode;
@@ -293,6 +287,7 @@
           }
         }
 
+        //  Event when back button is clicked
         document.getElementById("button").onclick = function () {
           var solid = d3.select("#path2").data()[0];
           click(solid);
@@ -300,8 +295,7 @@
 
         function click(d) {
 
-          
-
+          //  Display or remove back button from sight
           if (d.depth == 1) {
             $("#button").css("visibility", "visible");
             $("#button").css("opacity", "1");
@@ -319,10 +313,11 @@
           // fade out all text elements
           text.transition().style("opacity", "0");
 
+          //  Turn off hover during animation otherwise when you move the mouse before the animation is finished
+          //  the anmation will not display correctly
           path.on("mouseover", null)
             .on("mouseleave", null);
 
-        
           path.transition()
             .duration(750)
             .attrTween("d", arcTween(d))
@@ -360,16 +355,18 @@
                         return null;
                       }
                     })
+                    //  Check which labels are to long to fit in graph and put them on multiple lines
                     .each( function(e) {
                       if (d.depth == 1) {
                         if (e.depth == 2) {
-                          test = $("#path" + e.id).parent().find("text");
-                          var textWidth = test.width();
+                          selection = $("#path" + e.id).parent().find("text");
+                          var textWidth = selection.width();
                     
                           if (textWidth > 150) {
-
+                            //  Array with every seperate word in it
                             var arr = e.name.split(" ");
 
+                            //  Split array in two and create two new arrays each with one string per line
                             var half = arr.length / 2;
                             var lineOne = arr.slice(0, Math.ceil(half));
                             var lineTwo = arr.slice(Math.ceil(half), arr.length);
@@ -377,8 +374,10 @@
                             lineOne = lineOne.join(' ');
                             lineTwo = lineTwo.join(' ');
 
+                            //  Create new array with two lines in it
                             arr = [lineOne, lineTwo];
 
+                            // Remove original 'one line' label
                             var group = $("#path" + e.id).parent().find("text");
                             $( group ).empty();
 
@@ -386,6 +385,7 @@
                               
                               d3.select(this).append("tspan")
                                 .text(arr[i])
+                                //  Move each line downwards
                                 .attr("dy", i ? "1.2em" : 0)
                                 .attr("x", function(d) {
                                   var rotation = computeTextRotation(d);
@@ -443,7 +443,7 @@
                     })
 
                     
-
+                    //  Padding
                     .attr("dx", function(e) {
                       var rotation = computeTextRotation(e);
                       
@@ -479,10 +479,9 @@
                     elementChildren = d3.select('#path' + e.id);
                     elementChildren = elementChildren[0][0];
 
+                    //  Resize text paths
                     if (d.depth == 1) {
-
                       return "M-200 0L200 0";
-
                     } else if (d.depth == 0) {
                       var resize = resizeTextPath(e, elementChildren, 1.25);
                       return resize;
@@ -494,23 +493,8 @@
                     .style("opacity", "1");
                 }
             });
-            
-            // if (d.depth == 1) {
-            //   text.style("font-size", function(d) {
-            //     if (d.depth == 2) {
-            //       return "1em";
-            //     } else if (d.depth == 1) {
-            //       return "1.5em";
-            //     }
-            //   })
-            // } else if (d.depth == 0) {
-            //   text.style("font-size", function(d) {
-            //     if (d.depth == 2) {
-            //       return 0;
-            //     }
-            //   })
-            // }
 
+            //  Turn on hover again. Timeout added to solve issues
             setTimeout(function(){ 
               path.on("mouseover", mouseover)
                   .on("mouseleave", mouseleave);
@@ -521,17 +505,17 @@
 
       d3.select(self.frameElement).style("height", height + "px");
 
-      // Interpolate the scales!
+      // Interpolate the scales! Changes the size of arcs
       function arcTween(d) {
 
         if (d.depth == 1) {
-          var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);   // [0, 1] [startAngle, endAngle]
-            yd = d3.interpolate(y.domain(), [d.y, 1]);    // [0, 1] [0 || 0.25 || 0.5 || 0.75, 1]
-            yr = d3.interpolate(y.range(), [d.y ? 0 : 0, radius + 100]);   // [0, 500] [20, 500]
+          var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);
+            yd = d3.interpolate(y.domain(), [d.y, 1]);
+            yr = d3.interpolate(y.range(), [d.y ? 0 : 0, radius + 100]);
           } else if (d.depth == 0) {
-            var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);   // [0, 1] [startAngle, endAngle]
-              yd = d3.interpolate(y.domain(), [d.y, 1]);    // [0, 1] [0 || 0.25 || 0.5 || 0.75, 1]
-              yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);   // [0, 500] [20, 500]
+            var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);
+              yd = d3.interpolate(y.domain(), [d.y, 1]);
+              yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
           }
 
         return function(d, i) {
@@ -556,7 +540,6 @@
 
         var innerRadius = y(d.y);
         var outerRadius = y(d.y + d.dy);
-
 
         var position = innerRadius + (outerRadius - innerRadius) / 2;
 
@@ -596,7 +579,6 @@
                 startToSpace = /(.*?)\s/g,  //Everything between start and first space
                 spaceToEnd = /\s(.*?)$/g;   // Everything from space and the end of the string
           }
-
 
           newArc = newArc.replace(/,/g , " ");
 
@@ -649,7 +631,7 @@
           // Put whole string back together
           newArc = "M" + newStart + "A" + middleSec + " 0 0 1 " + newEnd;
 
-          //If the end angle lies beyond a quarter of a circle (90 degrees or pi/2) 
+          //If the end angle lies beyond 45 and not further than 180
           //flip the end and start position
           var rotation = computeTextRotation(d);
           if (rotation > 45 && rotation < 180) {
