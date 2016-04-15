@@ -82,14 +82,14 @@
               .attr("id", "arc"+i)
               .attr("d", newArc)
               .style("fill", "none")
-              .style("stroke", "#ff0000");
+              .style("stroke", "none");
 
             var pathText2 = svg.append("path")
               .attr("class", "hiddenArcSlices2")
               .attr("id", "secondArc"+i)
               .attr("d", newArc2)
               .style("fill", "none")
-              .style("stroke", "#ff0000");
+              .style("stroke", "none");
             }
         });
 
@@ -107,15 +107,17 @@
     // Draw text
       var text = links.append("text")
         // Give unique classes to every ring
-        .attr("class", function(d) {
+        .attr("class", function(d, i) {
           if (d.depth == 0) {
-            return "solid";
+            return "solid"; 
           } else if (d.depth == 1) {
-            return "innerRing";
+            return "innerRing" + d.id;
           } else if (d.depth == 2) {
             return "outerRing";
           }
         })
+        .style("font-family", "'Montserrat', sans-serif")
+        .style("font-size", "1em")
         // adjust textcolor
         .style("fill", function(d) {
           return color;
@@ -125,13 +127,7 @@
             return 0;
           }
         })
-        .style("pointer-events", function(d) {
-          if (d.depth == 2) {
-            return 'auto';
-          } else {
-            return "none";
-          }
-        })
+        .style("pointer-events", "none")
         // Hide text from innerRing
         .style("display", function(d) {
           if (d.depth == 0) {
@@ -243,20 +239,63 @@
           }
           else if (d.depth == 1) {
             // console.log(d.name, d.id, i);
-            var arcLength = d3.select("#arc" + i).node().getTotalLength();
-            console.log(d.name, arcLength, i);
+            var arcLength = d3.select("#arc" + i).node().getBBox().width;
+            // console.log(d.name, arcLength, i);
 
-            var textWidth = d3.selectAll(".innerRing");
-            // console.log(textWidth);
+            var textWidth = d3.select(".innerRing" + d.id).node().getBBox().width;
+            // console.log(d3.select(".innerRing" + d.id).node(), textWidth);
 
-            for (var j = 0; j < textWidth.length; j++) {
-              if (i == j) {
-                textWidth = textWidth[i];
-                console.log(textWidth);
-              }
-              // textWidth = textWidth[j];
-              // console.log(textWidth);
-            };
+            if (textWidth > arcLength) {
+
+              //  Array with every seperate word in it
+              var arr = d.name.split(" ");
+
+              //  Split array in two and create two new arrays each with one string per line
+              var half = arr.length / 2;
+              var lineOne = arr.slice(0, Math.ceil(half));
+              var lineTwo = arr.slice(Math.ceil(half), arr.length);
+
+              lineOne = lineOne.join(' ');
+              lineTwo = lineTwo.join(' ');
+
+              console.log(lineOne);
+              console.log(lineTwo);
+
+              //  Create new array with two lines in it
+              // arr = [lineOne, lineTwo];
+
+              // Remove original 'one line' label
+              var group = $(".innerRing" + d.id);
+              // console.log("group", group, d.id);
+              group.empty();
+
+              // for (var i = 0; i < arr.length; i++) {
+                var selection = d3.select(".innerRing" + d.id);
+                d3.select(".innerRing" + d.id).append("textPath")
+                  .text(lineOne)
+                  .attr("xlink:href", function(d){
+                    rotation = computeTextRotation(d);
+                    if (rotation > 0 && rotation < 180) {
+                      return "#secondArc" + i;
+                    } else {
+                      return "#arc" + i;
+                    }
+                  })
+                  .attr("startOffset", "50%");
+
+                d3.select(".innerRing" + d.id).append("textPath")
+                  .text(lineTwo)
+                  .attr("xlink:href", function(d){
+                    rotation = computeTextRotation(d);
+                    if (rotation > 0 && rotation < 180) {
+                      return "#arc" + i;
+                    } else {
+                      return "#secondArc" + i;
+                    }
+                  })
+                  .attr("startOffset", "50%");
+
+            }
           }
         })
         ;
@@ -390,20 +429,19 @@
                         return null;
                       }
                     })
+                    .style("pointer-events", function(d) {
+                      if (d.depth == 2) {
+                        return "auto";
+                      }
+                    })
                     //  Check which labels are to long to fit in graph and put them on multiple lines
                     .each( function(e) {
                       if (d.depth == 1) {
                         if (e.depth == 2) {
-                          // selection = $("#path" + e.id).parent().find("text");
-                          // selection = d3.select("#path" + e.id)[0][0].parentNode;
-                          // selection = d3.select(selection).select('text')[0];
+
                           selection = d3.select("#path" + e.id + " + a text");
-                          // console.log("selection", selection);
-                          // console.log(selection);
 
                           var textWidth = selection.node().getBBox().width;
-                          console.log(e.name, textWidth);
-
 
                           if (textWidth > 160) {
                             //  Array with every seperate word in it
@@ -551,7 +589,7 @@
 
                     //  Resize text paths
                     if (d.depth == 1) {
-                      return "M-200 -9L200 -9";
+                      return "M-200 9L200 9";
                     } else if (d.depth == 0) {
                       var resize = resizeTextPath(e, elementChildren, 1.25);
                       return resize;
@@ -568,7 +606,7 @@
 
                     //  Resize text paths
                     if (d.depth == 1) {
-                      return "M-200 9L200 9";
+                      return "M-200 -9L200 -9";
                     } else if (d.depth == 0) {
                       var resize = resizeTextPath(e, elementChildren, 1.38);
                       return resize;
