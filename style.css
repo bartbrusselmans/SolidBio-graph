@@ -1,16 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
+#messages .messages {
   position: relative;
-  width: 100%;
-}
-
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
+  z-index: 999999;
 }
 
 #solidbio-graph {
@@ -63,7 +55,7 @@ path {
   opacity: 0;
 }
 
-.logo {
+.graph-logo {
   display: block;
   margin: auto;
   transform: scale(1.5);
