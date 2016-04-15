@@ -1,82 +1,218 @@
+{
+   "name":"Solid Bio",
+   "id":"1",
+   "children":[
+      {
+         "name":"Board of Directors",
+         "id":"2",
+         "children":[
+            {
+               "name":"Gilad Hayeem",
+               "id":"8",
+               "size":"1"
+            },
+            {
+               "name":"Andrey Zarur, Ph.D.",
+               "id":"9",
+               "size":"1"
+            },
+            {
+               "name":"Matt Arnold",
+               "id":"10",
+               "size":"1"
+            },
+            {
+               "name":"Robert Huffines",
+               "id":"11",
+               "size":"1"
+            },
+            {
+               "name":"Ilan Ganot",
+               "id":"12",
+               "size":"1"
+            }
+         ]
+      },
+      {
+         "name":"Team",
+         "id":"3",
+         "children":[
+            {
+               "name":"Jonathan Budd",
+               "id":"13",
+               "size":"1"
+            },
+            {
+               "name":"Denton Lai",
+               "id":"14",
+               "size":"1"
+            },
+            {
+               "name":"Lineka Grusby",
+               "id":"15",
+               "size":"1"
+            },
+            {
+               "name":"Kathryn Wagner, MD, Ph.D.",
+               "id":"16",
+               "size":"1"
+            },
+            {
+               "name":"Kerry Rosenfeld",
+               "id":"17",
+               "size":"1"
+            },
+            {
+               "name":"Tayjus Surampudi",
+               "id":"18",
+               "size":"1"
+            },
+            {
+               "name":"Valorie Kopp-Aharonov",
+               "id":"19",
+               "size":"1"
+            },
+            {
+               "name":"Gaelyn Flannery",
+               "id":"20",
+               "size":"1"
+            },
+            {
+               "name":"Annie Ganot",
+               "id":"21",
+               "size":"1"
+            },
+            {
+               "name":"Michael Struharik",
+               "id":"22",
+               "size":"1"
+            }
+         ]
+      },
+      {
+         "name":"Solid Fellows",
+         "id":"4",
+         "children":[
+            {
+               "name":"Katrin Hollinger",
+               "id":"23",
+               "size":"1"
+            },
+            {
+               "name":"Steve Yang",
+               "id":"24",
+               "size":"1"
+            },
+            {
+               "name":"Aaron Black",
+               "id":"25",
+               "size":"1"
+            },
+            {
+               "name":"Sharla Birch",
+               "id":"26",
+               "size":"1"
+            }
+         ]
+      },
+      {
+         "name":"Scientific Advisory Board",
+         "id":"5",
+         "children":[
 
-	{
-		"name": "solid",
-		"id": 2,
-		"children": [
-		{
-			"name": "Team",
-			"id": 3,
-			"children": [
-				{"name": "Alvaro Amorrortu", "size": "1", "id": 9},
-				{"name": "Tayjus Surampudi", "size": "1", "id": 10},
-				{"name": "Gaelyn Flannery", "size": "1", "id": 11},
-				{"name": "Annie Ganot", "size": "1", "id": 12},
-				{"name": "VallKopp Aharonov", "size": "1", "id": 13},
-				{"name": "Christianne Baruqui", "size": "1", "id": 14},
-				{"name": "Karin Folman", "size": "1", "id": 15},
-				{"name": "Kerry Rosenfeld", "size": "1", "id": 16},
-				{"name": "Carl Morris", "size": "1", "id": 17},
-				{"name": "Joel Schneider", "size": "1", "id": 18}
-			]
-		},
-
-		{
-			"name": "BOD",
-			"id": 4,
-			"children": [
-				{"name": "Ilan Ganot", "size": "1", "id": 19},
-				{"name": "Andrey Zarur", "size": "1", "id": 20},
-				{"name": "Robbie Huffines", "size": "1", "id": 21},
-				{"name": "Matt Arnold", "size": "1", "id": 22},
-				{"name": "Gilad Hayeem", "size": "1", "id": 23}
-			]
-		},
-
-		{
-			"name": "Solid Fellows",
-			"id": 5,
-			"children": [
-				{"name": "Katrin Hollinger", "size": "1", "id": 24},
-				{"name": "JP Morgan", "size": "1", "id": 25}
-			]
-		},
-
-		{
-			"name": "SAB",
-			"id": 6,
-			"children": [
-				{"name": "James M. Wilson M.D., Ph.D", "size": "1", "id": 26},
-				{"name": "Pfizer", "size": "1", "id": 27},
-				{"name": "Debiopharm", "size": "1", "id": 28},
-				{"name": "U Penn", "size": "1", "id": 29},
-				{"name": "Univ of Missouri", "size": "1", "id": 30}
-			]
-		},
-
-		{
-			"name": "R&D Partners",
-			"id": 7,
-			"children": [
-				{"name": "Perelman School of medicine", "size": "1", "id": 31},
-				{"name": "Pfizer", "size": "1", "id": 32},
-				{"name": "Debiopharm", "size": "1", "id": 33},
-				{"name": "U Penn", "size": "1", "id": 34},
-				{"name": "Univ of Missouri", "size": "1", "id": 35}
-			]
-		},
-
-		{
-			"name": "Charity Partners",
-			"id": 8,
-			"children": [
-				{"name": "Parent Project Muscular Dystrophy", "size": "1", "id": 36},
-				{"name": "Pfizer", "size": "1", "id": 37},
-				{"name": "Debiopharm", "size": "1", "id": 38},
-				{"name": "U Penn", "size": "1", "id": 39},
-				{"name": "Univ of Missouri", "size": "1", "id": 40}
-			]
-		}
-
-
-		]
-	}
+         ]
+      },
+      {
+         "name":"R&D Partners",
+         "id":"6",
+         "children":[
+            {
+               "name":"UPenn Vector core",
+               "id":"27",
+               "size":"1"
+            },
+            {
+               "name":"Kennedy Krieger",
+               "id":"28",
+               "size":"1"
+            },
+            {
+               "name":"University of Washington",
+               "id":"29",
+               "size":"1"
+            },
+            {
+               "name":"Newcastle University",
+               "id":"30",
+               "size":"1"
+            },
+            {
+               "name":"U MASS Medical School",
+               "id":"31",
+               "size":"1"
+            },
+            {
+               "name":"University of Florida",
+               "id":"32",
+               "size":"1"
+            },
+            {
+               "name":"Texas A&M University",
+               "id":"33",
+               "size":"1"
+            },
+            {
+               "name":"Debiopharm Group",
+               "id":"34",
+               "size":"1"
+            },
+            {
+               "name":"R&D Partner",
+               "id":"35",
+               "size":"1"
+            },
+            {
+               "name":"Pfizer",
+               "id":"36",
+               "size":"1"
+            }
+         ]
+      },
+      {
+         "name":"Charity Partners",
+         "id":"7",
+         "children":[
+            {
+               "name":"Duchenne Now",
+               "id":"37",
+               "size":"1"
+            },
+            {
+               "name":"Save Our Sons ",
+               "id":"38",
+               "size":"1"
+            },
+            {
+               "name":"Duchenne Children's Trust",
+               "id":"39",
+               "size":"1"
+            },
+            {
+               "name":"PPMD",
+               "id":"40",
+               "size":"1"
+            },
+            {
+               "name":"Joining Jack",
+               "id":"41",
+               "size":"1"
+            },
+            {
+               "name":"Duchenne Research Fund",
+               "id":"42",
+               "size":"1"
+            }
+         ]
+      }
+   ]
+}

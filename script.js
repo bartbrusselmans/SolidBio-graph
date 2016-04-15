@@ -68,12 +68,20 @@
           if (d.depth == 1) {
 
             var newArc = resizeTextPath(d, this, 1.25);
+            var newArc2 = resizeTextPath(d, this, 1.38);
 
             //  Create a new invisible arc that the text can flow along
             var pathText = svg.append("path")
               .attr("class", "hiddenArcSlices")
               .attr("id", "arc"+i)
               .attr("d", newArc)
+              .style("fill", "none")
+              .style("stroke", "none");
+
+            var pathText2 = svg.append("path")
+              .attr("class", "hiddenArcSlices2")
+              .attr("id", "arc"+i)
+              .attr("d", newArc2)
               .style("fill", "none")
               .style("stroke", "none");
             }
@@ -200,7 +208,7 @@
           }
         })
 
-        // Place text on path
+        // place text on path
         var textPaths = text.append("textPath")
         .attr("xlink:href", function(d, i) {
           if (d.depth == 2) {
@@ -218,8 +226,19 @@
            return d.name;
          }
         })
-        ;
 
+        .each( function(d, i) {
+          if (d.depth == 2 || d.depth == 0) {
+            return null;
+          }
+          else if (d.depth == 1) {
+            // console.log(d.name, d.id, i);
+            var arcLength = d3.select("#arc" + i).node().getTotalLength();
+            // console.log(arcLength);
+            // var textWidth = d3.select()
+          }
+        })
+        ;
 
         function mouseover(d) {
 
@@ -289,7 +308,7 @@
 
         //  Event when back button is clicked
         document.getElementById("button").onclick = function () {
-          var solid = d3.select("#path2").data()[0];
+          var solid = d3.select("#path1").data()[0];
           click(solid);
         };
 
@@ -359,10 +378,17 @@
                     .each( function(e) {
                       if (d.depth == 1) {
                         if (e.depth == 2) {
-                          selection = $("#path" + e.id).parent().find("text");
-                          var textWidth = selection.width();
-                    
-                          if (textWidth > 150) {
+                          // selection = $("#path" + e.id).parent().find("text");
+                          // selection = d3.select("#path" + e.id)[0][0].parentNode;
+                          // selection = d3.select(selection).select('text')[0];
+                          selection = d3.select("#path" + e.id);
+                          // console.log(selection);
+
+                          var textWidth = selection.node().getBBox().width;
+                          console.log(textWidth);
+
+
+                          if (textWidth > 160) {
                             //  Array with every seperate word in it
                             var arr = e.name.split(" ");
 
@@ -374,23 +400,48 @@
                             lineOne = lineOne.join(' ');
                             lineTwo = lineTwo.join(' ');
 
-                            //  Create new array with two lines in it
-                            arr = [lineOne, lineTwo];
+                            if (lineOne.length > 16) {
+                              //  Array with every seperate word in it
+                              arr = lineOne.split(" ");
+
+                              //  Split array in two and create two new arrays each with one string per line
+                              half = arr.length / 2;
+                              var lineThree = lineTwo;
+                              lineOne = arr.slice(0, Math.ceil(half));
+                              lineTwo = arr.slice(Math.ceil(half), arr.length);
+
+                              lineOne = lineOne.join(' ');
+                              lineTwo = lineTwo.join(' ');
+
+                              //  Create new array with three lines in it
+                              arr = [lineOne, lineTwo, lineThree];
+
+                            } else {
+                              //  Create new array with two lines in it
+                              arr = [lineOne, lineTwo];
+                            }
+
 
                             // Remove original 'one line' label
                             var group = $("#path" + e.id).parent().find("text");
-                            $( group ).empty();
+                            group.empty();
 
                             for (var i = 0; i < arr.length; i++) {
                               
                               d3.select(this).append("tspan")
                                 .text(arr[i])
                                 //  Move each line downwards
-                                .attr("dy", i ? "1.2em" : 0)
+                                .attr("dy", function(d) {
+                                  if (arr.length == 3) {
+                                    return i ? "1.2em" : "-1.2em"
+                                  } else if (arr.length == 2) {
+                                     return i ? "1.2em" : "-0.6em"
+                                  }
+                                })
                                 .attr("x", function(d) {
                                   var rotation = computeTextRotation(d);
                                   if (rotation > 90) {
-                                    return i ? -220 : 200
+                                    return i ? -220 : -200
                                   } else {
                                     return i ? 220 : 200
                                   }
@@ -509,10 +560,12 @@
       function arcTween(d) {
 
         if (d.depth == 1) {
+          radius = 400;
           var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);
             yd = d3.interpolate(y.domain(), [d.y, 1]);
-            yr = d3.interpolate(y.range(), [d.y ? 0 : 0, radius + 100]);
+            yr = d3.interpolate(y.range(), [d.y ? 0 : 0, radius]);
           } else if (d.depth == 0) {
+            radius = 300;
             var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);
               yd = d3.interpolate(y.domain(), [d.y, 1]);
               yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
