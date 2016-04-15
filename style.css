@@ -71,6 +71,10 @@ path {
   -moz-transform: scale(1.5);
 }
 
+text {
+  pointer-events: none;
+}
+
 #button-wrapper {
   z-index: -10;
   width: 82px;

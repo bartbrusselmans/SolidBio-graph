@@ -94,18 +94,18 @@
         });
 
         //  Append a elements so labels on outer rings are clickable
-        var links = g.append("a")
-          .attr("xlink:href", function(d) {
-            if (d.depth == 2) {
-              return "http://www.google.com"
-            } else {
-              return null
-            }
-          });
+        // var links = g.append("a")
+        //   .attr("xlink:href", function(d) {
+        //     if (d.depth == 2) {
+        //       return "http://www.google.com"
+        //     } else {
+        //       return null
+        //     }
+        //   });
 
 
     // Draw text
-      var text = links.append("text")
+      var text = g.append("text")
         // Give unique classes to every ring
         .attr("class", function(d, i) {
           if (d.depth == 0) {
@@ -127,8 +127,7 @@
             return 0;
           }
         })
-        .style("pointer-events", "none")
-        // Hide text from innerRing
+
         .style("display", function(d) {
           if (d.depth == 0) {
             return "none"
@@ -238,12 +237,12 @@
             return null;
           }
           else if (d.depth == 1) {
-            // console.log(d.name, d.id, i);
-            var arcLength = d3.select("#arc" + i).node().getBBox().width;
-            // console.log(d.name, arcLength, i);
+            var arcLength = d3.select("#arc" + i).node().getTotalLength();
 
-            var textWidth = d3.select(".innerRing" + d.id).node().getBBox().width;
-            // console.log(d3.select(".innerRing" + d.id).node(), textWidth);
+            var textWidth = d3.select(".innerRing" + d.id).node().getBBox();
+            textWidth = 1.1 * Math.sqrt(Math.pow(textWidth.width, 2) + Math.pow(textWidth.height, 2));
+
+            console.log(d.name, arcLength, textWidth);
 
             if (textWidth > arcLength) {
 
@@ -258,15 +257,8 @@
               lineOne = lineOne.join(' ');
               lineTwo = lineTwo.join(' ');
 
-              console.log(lineOne);
-              console.log(lineTwo);
-
-              //  Create new array with two lines in it
-              // arr = [lineOne, lineTwo];
-
               // Remove original 'one line' label
               var group = $(".innerRing" + d.id);
-              // console.log("group", group, d.id);
               group.empty();
 
               // for (var i = 0; i < arr.length; i++) {
@@ -434,17 +426,12 @@
                         return null;
                       }
                     })
-                    .style("pointer-events", function(d) {
-                      if (d.depth == 2) {
-                        return "auto";
-                      }
-                    })
                     //  Check which labels are to long to fit in graph and put them on multiple lines
                     .each( function(e) {
                       if (d.depth == 1) {
                         if (e.depth == 2) {
 
-                          selection = d3.select("#path" + e.id + " + a text");
+                          selection = d3.select("#path" + e.id + " + text");
 
                           var textWidth = selection.node().getBBox().width;
 
