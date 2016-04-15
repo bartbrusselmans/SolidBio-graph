@@ -34,7 +34,7 @@
         .innerRadius(function(d) { return Math.max(0, y(d.y)); })
         .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
-    d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) {
+    d3.json("data.json", function(error, root) {
       var g = svg.selectAll("g")
         .data(partition.nodes(root))
         .enter().append("g");
@@ -43,6 +43,9 @@
       var path = g.append("path")
         .attr("d", arc)
         .attr("class", "arcSlices")
+        .attr("data-entity-type", function(d) {
+          return d.entity_type;
+        })
         .style("fill", function(d) {
           if (d.depth == 0) {
             // Make inner circle transparent
@@ -76,14 +79,14 @@
               .attr("id", "arc"+i)
               .attr("d", newArc)
               .style("fill", "none")
-              .style("stroke", "none");
+              .style("stroke", "#ff0000");
 
             var pathText2 = svg.append("path")
               .attr("class", "hiddenArcSlices2")
-              .attr("id", "arc"+i)
+              .attr("id", "secondArc"+i)
               .attr("d", newArc2)
               .style("fill", "none")
-              .style("stroke", "none");
+              .style("stroke", "#ff0000");
             }
         });
 
@@ -199,10 +202,10 @@
           var rotation = computeTextRotation(d);
           if (d.depth == 2) {
             return ".35em";
-          } else if (d.depth == 1 && rotation > 45 && rotation < 180) {
+          } else if (d.depth == 1 && rotation > 0 && rotation < 190) {
             return null;
           } else if (d.depth == 1) {
-            return ".75em";
+            return null;
           } else if (d.depth == 0) {
             return null;
           }
@@ -213,6 +216,10 @@
         .attr("xlink:href", function(d, i) {
           if (d.depth == 2) {
             return null;
+          }
+          rotation = computeTextRotation(d);
+          if (rotation < 0  || rotation > 180) {
+            return "#secondArc" + i;
           }
           return "#arc" + i;
         })
@@ -234,8 +241,19 @@
           else if (d.depth == 1) {
             // console.log(d.name, d.id, i);
             var arcLength = d3.select("#arc" + i).node().getTotalLength();
-            // console.log(arcLength);
-            // var textWidth = d3.select()
+            console.log(d.name, arcLength, i);
+
+            var textWidth = d3.selectAll(".innerRing");
+            // console.log(textWidth);
+
+            for (var j = 0; j < textWidth.length; j++) {
+              if (i == j) {
+                textWidth = textWidth[i];
+                console.log(textWidth);
+              }
+              // textWidth = textWidth[j];
+              // console.log(textWidth);
+            };
           }
         })
         ;
@@ -303,7 +321,7 @@
 
         //  Event when back button is clicked
         document.getElementById("button").onclick = function () {
-          var solid = d3.select("#path1").data()[0];
+          var solid = d3.select("#path0").data()[0];
           click(solid);
         };
 
@@ -377,13 +395,14 @@
                           // selection = d3.select("#path" + e.id)[0][0].parentNode;
                           // selection = d3.select(selection).select('text')[0];
                           selection = d3.select("#path" + e.id);
+                          // console.log("selection", selection);
                           // console.log(selection);
 
                           var textWidth = selection.node().getBBox().width;
-                          console.log(textWidth);
+                          console.log(e.name, textWidth);
 
 
-                          if (textWidth > 160) {
+                          if (textWidth > 200) {
                             //  Array with every seperate word in it
                             var arr = e.name.split(" ");
 
@@ -517,7 +536,9 @@
                     });
 
                   var pathText = d3.select('#arc' + i);
+                  var secondPathText = d3.select('#secondArc' + i);
 
+                  //  Replace text arc on click
                   pathText.transition().duration(0)
                   .attr("d", function() {
                     elements = d3.select('#path' + d.id);
@@ -527,12 +548,31 @@
 
                     //  Resize text paths
                     if (d.depth == 1) {
-                      return "M-200 0L200 0";
+                      return "M-200 -9L200 -9";
                     } else if (d.depth == 0) {
                       var resize = resizeTextPath(e, elementChildren, 1.25);
                       return resize;
                     }
                   })
+
+                  // Place text arc back on click
+                  secondPathText.transition().duration(0)
+                  .attr("d", function() {
+                    elements = d3.select('#path' + d.id);
+                    elements = elements[0][0];
+                    elementChildren = d3.select('#path' + e.id);
+                    elementChildren = elementChildren[0][0];
+
+                    //  Resize text paths
+                    if (d.depth == 1) {
+                      return "M-200 9L200 9";
+                    } else if (d.depth == 0) {
+                      var resize = resizeTextPath(e, elementChildren, 1.38);
+                      return resize;
+                    }
+                  })
+
+
                 } else if (e.depth == 0) {
                   var arcText = d3.select(this.parentNode).select("text");
                   arcText.transition().duration(0)
@@ -682,7 +722,7 @@
           //If the end angle lies beyond 45 and not further than 180
           //flip the end and start position
           var rotation = computeTextRotation(d);
-          if (rotation > 45 && rotation < 180) {
+          if (rotation > 0 && rotation < 180) {
 
             // Flip the direction of the arc by switching the start and end point (and sweep flag)
             var newStart = endLoc.exec( newArc )[1];
