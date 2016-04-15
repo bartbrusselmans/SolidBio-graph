@@ -46,6 +46,9 @@
         .attr("data-entity-type", function(d) {
           return d.entity_type;
         })
+        .attr("data-entity-id", function(d) {
+          return d.entity_id;
+        })
         .style("fill", function(d) {
           if (d.depth == 0) {
             // Make inner circle transparent
