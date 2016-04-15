@@ -1,5 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
+#messages .messages {
+  position: relative;
+  z-index: 999999;
+}
+
 #solidbio-graph {
   position: relative;
   left: -50%;
