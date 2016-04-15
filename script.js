@@ -399,7 +399,7 @@
                           // selection = $("#path" + e.id).parent().find("text");
                           // selection = d3.select("#path" + e.id)[0][0].parentNode;
                           // selection = d3.select(selection).select('text')[0];
-                          selection = d3.select("#path" + e.id);
+                          selection = d3.select("#path" + e.id + " + a text");
                           // console.log("selection", selection);
                           // console.log(selection);
 
@@ -407,7 +407,7 @@
                           console.log(e.name, textWidth);
 
 
-                          if (textWidth > 200) {
+                          if (textWidth > 160) {
                             //  Array with every seperate word in it
                             var arr = e.name.split(" ");
 
