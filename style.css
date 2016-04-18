@@ -1,21 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 100%;
-}
-
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
 #solidbio-graph {
   position: relative;
   font-size: 18px !important;
+  -webkit-transform: scale(0.8);
+  -moz-transform:    scale(0.8);
+  -ms-transform:     scale(0.8);
+  -o-transform:      scale(0.8);
+  transform:         scale(0.8);
 }
 
 path {
@@ -76,7 +68,7 @@ text {
 
 #button-wrapper {
   z-index: -10;
-  width: 82px;
+  width: 52px;
 }
 
 #button {
