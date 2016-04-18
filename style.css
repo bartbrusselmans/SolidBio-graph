@@ -15,7 +15,6 @@ form {
 
 #solidbio-graph {
   position: relative;
-  left: -50%;
   font-size: 18px !important;
 }
 
@@ -98,5 +97,9 @@ text {
 #button-wrapper {
   position: relative;
   top: -400px;
-  left: -30px;
+  margin: 0 auto;
+}
+
+#button-wrapper #button {
+  margin: 0 auto;
 }
