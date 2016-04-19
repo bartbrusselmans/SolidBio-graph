@@ -74,7 +74,7 @@
           if (d.depth == 1) {
 
             var newArc = resizeTextPath(d, this, 1.25);
-            var newArc2 = resizeTextPath(d, this, 1.38);
+            var newArc2 = resizeTextPath(d, this, 1.42);
 
             //  Create a new invisible arc that the text can flow along
             var pathText = svg.append("path")
@@ -242,7 +242,7 @@
             var textWidth = d3.select(".innerRing" + d.id).node().getBBox();
             textWidth = 1.1 * Math.sqrt(Math.pow(textWidth.width, 2) + Math.pow(textWidth.height, 2));
 
-            console.log(d.name, arcLength, textWidth);
+            // console.log(d.name, arcLength, textWidth);
 
             if (textWidth > arcLength) {
 
@@ -373,8 +373,13 @@
             $("#button").css("transition", "visibility 0s, opacity 0s linear");
             $("#button-wrapper").css("z-index", "-10");
           } else if (d.depth == 2) {
-            return false;
+            var parent = d.parent;
+            click(parent);
+            return false
           }
+
+          var arcRotation = computeTextRotation(d);
+          // console.log(d, rotation);
 
           // fade out all text elements
           text.transition().style("opacity", "0");
@@ -516,6 +521,28 @@
                         return "middle";
                       }
                     })
+                    .style("font-size", function(e) {
+                      if (d.depth == 1 || d.depth == 2) {
+                        if (e.depth == 1) {
+                          return "1.5em";
+                        }
+                      } else if (d.depth == 0) {
+                        if (e.depth == 1) {
+                          return "1em"
+                        }
+                      }
+                    })
+                    .style("fill", function(e) {
+                      if (d.depth == 1 || d.depth == 2) {
+                        if (e.depth == 1) {
+                          return "#000000";
+                        } else {
+                          return color
+                        }
+                      } else if (d.depth == 0) {
+                        return color
+                      }
+                    })
                     .attr("x", function(e) {
                       var rotation = computeTextRotation(e);
                       if (d.depth == 1) {
@@ -566,6 +593,8 @@
                   var pathText = d3.select('#arc' + i);
                   var secondPathText = d3.select('#secondArc' + i);
 
+                  
+
                   //  Replace text arc on click
                   pathText.transition().duration(0)
                   .attr("d", function() {
@@ -576,14 +605,18 @@
 
                     //  Resize text paths
                     if (d.depth == 1) {
-                      return "M-200 9L200 9";
+                      if (arcRotation > 180) {
+                        return "M-200 -15L200 -15";
+                      } else {
+                        return "M-200 15L200 15";
+                      }
                     } else if (d.depth == 0) {
                       var resize = resizeTextPath(e, elementChildren, 1.25);
                       return resize;
                     }
                   })
 
-                  // Place text arc back on click
+                  // Place text arc on click
                   secondPathText.transition().duration(0)
                   .attr("d", function() {
                     elements = d3.select('#path' + d.id);
@@ -593,9 +626,13 @@
 
                     //  Resize text paths
                     if (d.depth == 1) {
-                      return "M-200 -9L200 -9";
+                      if (arcRotation > 180) {
+                        return "M-200 15L200 15";
+                      } else {
+                        return "M-200 -15L200 -15";
+                      }
                     } else if (d.depth == 0) {
-                      var resize = resizeTextPath(e, elementChildren, 1.38);
+                      var resize = resizeTextPath(e, elementChildren, 1.42);
                       return resize;
                     }
                   })
