@@ -34,7 +34,7 @@
         .innerRadius(function(d) { return Math.max(0, y(d.y)); })
         .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
-    d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) {
+    d3.json("data.json", function(error, root) {
       var g = svg.selectAll("g")
         .data(partition.nodes(root))
         .enter().append("g");
@@ -294,7 +294,10 @@
 
         function mouseover(d) {
 
+          var title = document.getElementById('group');
           var content = d.name;
+          title.innerHTML = content;
+        
 
           var thisObject = d;
           var objectsArray = [];
@@ -329,7 +332,9 @@
 
         function mouseleave(d) {
 
+          var title = document.getElementById('group');
           var content = "Solid Organogram";
+          title.innerHTML = content;
           
 
           var thisObject = d;
@@ -361,6 +366,8 @@
 
         function click(d) {
 
+          var check = $( this ).hasClass( "non-active" );
+
           //  Display or remove back button from sight
           if (d.depth == 1) {
             $("#button").css("visibility", "visible");
@@ -372,14 +379,15 @@
             $("#button").css("opacity", "0");
             $("#button").css("transition", "visibility 0s, opacity 0s linear");
             $("#button-wrapper").css("z-index", "-10");
+          } else if (d.depth == 2 && check == true) {
+            return false
           } else if (d.depth == 2) {
             var parent = d.parent;
             click(parent);
             return false
-          }
+          } 
 
           var arcRotation = computeTextRotation(d);
-          // console.log(d, rotation);
 
           // fade out all text elements
           text.transition().style("opacity", "0");
@@ -392,6 +400,18 @@
           path.transition()
             .duration(750)
             .attrTween("d", arcTween(d))
+            .attr("class", function(e) {
+              if (d.depth == 1 || d.depth == 2) {
+                if (e.depth == 2) {
+                  // console.log(e);
+                  return "non-active";
+                }
+              } else if (d.depth == 0) {
+                if (e.depth == 2) {
+                  return "arcSlices";
+                }
+              }
+            })
             .each("end", function(e, i) {
 
                 // check if the animated element's data e lies within the visible angle span given in d
@@ -543,6 +563,7 @@
                         return color
                       }
                     })
+                    
                     .attr("x", function(e) {
                       var rotation = computeTextRotation(e);
                       if (d.depth == 1) {
