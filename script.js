@@ -32,7 +32,26 @@
         .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
         .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
         .innerRadius(function(d) { return Math.max(0, y(d.y)); })
-        .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
+        .outerRadius(function(d) {
+          var pp = $("#path" + d.id) || false;
+            // if (pp.classed('non-active')) {
+            //   return false;
+            // }
+          if (pp.length > 0) {
+            if (d.depth == 2 && pp.hasClass('arcSlices')) {
+              return 250;
+            } else {
+              return Math.max(0, y(d.y + d.dy));
+            }
+          } else {
+            if (d.depth == 1 ) {
+              return Math.max(0, y(d.y + d.dy));
+            } else {
+              return 250;
+            }
+          }
+        });
+
 
     d3.json("data.json", function(error, root) {
       var g = svg.selectAll("g")
@@ -372,15 +391,15 @@
         function click(d) {
 
           var check = $(this).hasClass("non-active");
-          var check2 = $(this).hasClass("big-innerRing");
+          var checkinnerRing = $(this).hasClass("big-innerRing");
           // console.log(check);
           // console.log('element', $(this));
 
-          //  Display or remove back button from sight
-          if (d.depth == 1 && check2 == true) {
+          // innerRing clickable or not
+          if (d.depth == 1 && checkinnerRing == true) {
             return false;
-
           }
+          //  Display or remove back button from sight
           else if (d.depth == 1) {
             $("#button").css("visibility", "visible");
             $("#button").css("opacity", "1");
@@ -418,7 +437,7 @@
 
           path.transition()
             .duration(750)
-            .attrTween("d", arcTween(d))
+            
             .attr("class", function(e) {
               if (d.depth == 1 || d.depth == 2) {
                 if (e.depth == 2) {
@@ -435,6 +454,7 @@
                 }
               }
             })
+            .attrTween("d", arcTween(d))
             .each("end", function(e, i) {
 
                 // check if the animated element's data e lies within the visible angle span given in d
