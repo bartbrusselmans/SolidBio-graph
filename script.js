@@ -65,6 +65,11 @@
           } else 
           return "#D7D7D7";
         })
+        .style("cursor", function(d) {
+          if (d.depth == 0) {
+            return "default";
+          }
+        })
         //animation onClick
         .on("click", click)
         .on("mouseover", mouseover)
@@ -366,10 +371,17 @@
 
         function click(d) {
 
-          var check = $( this ).hasClass( "non-active" );
+          var check = $(this).hasClass("non-active");
+          var check2 = $(this).hasClass("big-innerRing");
+          // console.log(check);
+          // console.log('element', $(this));
 
           //  Display or remove back button from sight
-          if (d.depth == 1) {
+          if (d.depth == 1 && check2 == true) {
+            return false;
+
+          }
+          else if (d.depth == 1) {
             $("#button").css("visibility", "visible");
             $("#button").css("opacity", "1");
             $("#button").css("transition", "visibility 1.5s, opacity 1.5s linear");
@@ -379,9 +391,16 @@
             $("#button").css("opacity", "0");
             $("#button").css("transition", "visibility 0s, opacity 0s linear");
             $("#button-wrapper").css("z-index", "-10");
-          } else if (d.depth == 2 && check == true) {
+          }
+          // Check for the outer ring to be clickable or not 
+          else if (d.depth == 2 && check == true) {
             return false
           } else if (d.depth == 2) {
+            var pp = d3.select("#path" + d.id);
+            if (pp.classed('non-active')) {
+              return false;
+            }
+
             var parent = d.parent;
             click(parent);
             return false
@@ -405,10 +424,14 @@
                 if (e.depth == 2) {
                   // console.log(e);
                   return "non-active";
+                } else if (e.depth == 1) {
+                  return "big-innerRing"
                 }
               } else if (d.depth == 0) {
                 if (e.depth == 2) {
                   return "arcSlices";
+                } else if (d.depth == 1) {
+                  return "arcSlices"
                 }
               }
             })
