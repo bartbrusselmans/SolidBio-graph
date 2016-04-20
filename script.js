@@ -33,12 +33,12 @@
         .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
         .innerRadius(function(d) { return Math.max(0, y(d.y)); })
         .outerRadius(function(d) {
-          var pp = $("#path" + d.id) || false;
+          var pp = d3.select("#path" + d.id);
             // if (pp.classed('non-active')) {
             //   return false;
             // }
-          if (pp.length > 0) {
-            if (d.depth == 2 && pp.hasClass('arcSlices')) {
+          if (pp[0][0] != null) {
+            if (d.depth == 2 && pp.classed('arcSlices')) {
               return 250;
             } else {
               return Math.max(0, y(d.y + d.dy));
