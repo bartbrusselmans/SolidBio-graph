@@ -318,11 +318,6 @@
 
         function mouseover(d) {
 
-          var title = document.getElementById('group');
-          var content = d.name;
-          title.innerHTML = content;
-        
-
           var thisObject = d;
           var objectsArray = [];
           var colorArray = [];
@@ -355,11 +350,6 @@
         }
 
         function mouseleave(d) {
-
-          var title = document.getElementById('group');
-          var content = "Solid Organogram";
-          title.innerHTML = content;
-          
 
           var thisObject = d;
           var objectsArray = [];
