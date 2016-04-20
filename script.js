@@ -53,7 +53,7 @@
         });
 
 
-    d3.json("data.json", function(error, root) {
+    d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) {
       var g = svg.selectAll("g")
         .data(partition.nodes(root))
         .enter().append("g");
