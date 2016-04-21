@@ -1,29 +1,18 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 100%;
-}
-
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
 #solidbio-graph {
   position: relative;
-  left: -50%;
   font-size: 18px !important;
+}
+
+.solidbio-graph {
+  font-family: 'Open-sans';
 }
 
 path {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
-  cursor: pointer;
 }
 
 .line {
@@ -34,25 +23,25 @@ path {
 
 .innerRing {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 1em;
 }
 
 .outerRing {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 1em;
 }
 
 .data {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 1em;
 }
 
 .solid {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 0;
 }
 
@@ -64,7 +53,7 @@ path {
   opacity: 0;
 }
 
-.logo {
+.graph-logo {
   display: block;
   margin: auto;
   transform: scale(1.5);
@@ -74,11 +63,12 @@ path {
 
 text {
   pointer-events: none;
+  font-weight: 400;
 }
 
 #button-wrapper {
   z-index: -10;
-  width: 82px;
+  width: 52px;
 }
 
 #button {
@@ -94,19 +84,14 @@ text {
     visibility: hidden;
     opacity: 0;
     transition: visibility 1.5s, opacity 1.5s linear;
-    cursor: pointer;
 }
 
 #button-wrapper {
   position: relative;
   top: -400px;
-  left: -30px;
+  margin: 0 auto;
 }
 
-.non-active {
-  cursor: default;
-}
-
-.big-innerRing {
-  cursor: default;
+#button-wrapper #button {
+  margin: 0 auto;
 }

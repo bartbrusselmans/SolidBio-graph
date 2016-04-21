@@ -31,15 +31,39 @@
     var arc = d3.svg.arc()
         .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
         .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
-        .innerRadius(function(d) { return Math.max(0, y(d.y)); })
+        .innerRadius(function(d) { 
+          var pp = d3.select('#path' + d.id);
+
+          if (pp[0][0] != null) {
+            if (d.depth == 1 && pp.classed('arcSlices')) {
+              return 50;
+            } else if (d.depth == 2 && pp.classed('arcSlices')) {
+              return 200
+            } else {
+              return Math.max(0, y(d.y));
+            }
+          } else {
+            if (d.depth == 0) {
+              return Math.max(0, y(d.y));
+            } else  if (d.depth == 2) {
+              return 200;
+            } else {
+              return 50;
+            }
+          }
+        })
         .outerRadius(function(d) {
-          var pp = $("#path" + d.id) || false;
-            // if (pp.classed('non-active')) {
-            //   return false;
-            // }
-          if (pp.length > 0) {
-            if (d.depth == 2 && pp.hasClass('arcSlices')) {
-              return 250;
+          var pp = d3.select("#path" + d.id);
+
+          if (pp[0][0] != null) {
+            if (d.depth == 2 && pp.classed('arcSlices')) {
+              return Math.max(0, y(d.y + d.dy)-50);
+            } else if (d.depth == 2 && pp.classed('non-active')) {
+              return Math.max(0, y(d.y + d.dy)-50);
+            } else if (d.depth == 2) {
+              return Math.max(0, y(d.y + d.dy) - 50);
+            } else if (d.depth == 0) {
+              return 50;
             } else {
               return Math.max(0, y(d.y + d.dy));
             }
@@ -53,7 +77,7 @@
         });
 
 
-    d3.json("data.json", function(error, root) {
+    d3.json(Drupal.settings.solidbio.organisationalchart.url, function(error, root) {
       var g = svg.selectAll("g")
         .data(partition.nodes(root))
         .enter().append("g");
@@ -140,7 +164,7 @@
             return "outerRing";
           }
         })
-        .style("font-family", "'Montserrat', sans-serif")
+        // .style("font-family", "'Montserrat', sans-serif")
         .style("font-size", "1em")
         // adjust textcolor
         .style("fill", function(d) {
@@ -311,17 +335,55 @@
                   })
                   .attr("startOffset", "50%");
 
+            } else if (textWidth > 100 ) {
+
+              //  Array with every seperate word in it
+              var arr = d.name.split(" ");
+
+              //  Split array in two and create two new arrays each with one string per line
+              var half = arr.length / 2;
+              var lineOne = arr.slice(0, Math.ceil(half));
+              var lineTwo = arr.slice(Math.ceil(half), arr.length);
+
+              lineOne = lineOne.join(' ');
+              lineTwo = lineTwo.join(' ');
+
+              // Remove original 'one line' label
+              var group = $(".innerRing" + d.id);
+              group.empty();
+
+              // for (var i = 0; i < arr.length; i++) {
+                var selection = d3.select(".innerRing" + d.id);
+                d3.select(".innerRing" + d.id).append("textPath")
+                  .text(lineOne)
+                  .attr("xlink:href", function(d){
+                    rotation = computeTextRotation(d);
+                    if (rotation > 0 && rotation < 180) {
+                      return "#secondArc" + i;
+                    } else {
+                      return "#arc" + i;
+                    }
+                  })
+                  .attr("startOffset", "50%");
+
+                d3.select(".innerRing" + d.id).append("textPath")
+                  .text(lineTwo)
+                  .attr("xlink:href", function(d){
+                    rotation = computeTextRotation(d);
+                    if (rotation > 0 && rotation < 180) {
+                      return "#arc" + i;
+                    } else {
+                      return "#secondArc" + i;
+                    }
+                  })
+                  .attr("startOffset", "50%");
+
             }
           }
         })
         ;
 
         function mouseover(d) {
-
-          var title = document.getElementById('group');
-          var content = d.name;
-          title.innerHTML = content;
-        
 
           var thisObject = d;
           var objectsArray = [];
@@ -355,11 +417,6 @@
         }
 
         function mouseleave(d) {
-
-          var title = document.getElementById('group');
-          var content = "Solid Organogram";
-          title.innerHTML = content;
-          
 
           var thisObject = d;
           var objectsArray = [];
@@ -449,7 +506,7 @@
               } else if (d.depth == 0) {
                 if (e.depth == 2) {
                   return "arcSlices";
-                } else if (d.depth == 1) {
+                } else if (e.depth == 1) {
                   return "arcSlices"
                 }
               }
@@ -498,7 +555,7 @@
 
                           var textWidth = selection.node().getBBox().width;
 
-                          if (textWidth > 160) {
+                          if (textWidth > 80) {
                             //  Array with every seperate word in it
                             var arr = e.name.split(" ");
 
@@ -510,7 +567,9 @@
                             lineOne = lineOne.join(' ');
                             lineTwo = lineTwo.join(' ');
 
-                            if (lineOne.length > 16) {
+                            console.log(lineOne, lineOne.length);
+
+                            if (lineOne.length > 10) {
                               //  Array with every seperate word in it
                               arr = lineOne.split(" ");
 
