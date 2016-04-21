@@ -13,6 +13,11 @@ path {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
+  cursor: pointer;
+}
+
+.non-active, .big-innerRing {
+  cursor: default;
 }
 
 .line {
@@ -84,6 +89,7 @@ text {
     visibility: hidden;
     opacity: 0;
     transition: visibility 1.5s, opacity 1.5s linear;
+    cursor: pointer;
 }
 
 #button-wrapper {

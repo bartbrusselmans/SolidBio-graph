@@ -36,9 +36,13 @@
 
           if (pp[0][0] != null) {
             if (d.depth == 1 && pp.classed('arcSlices')) {
-              return 50;
+              return Math.max(0, y(d.y)-50);
             } else if (d.depth == 2 && pp.classed('arcSlices')) {
-              return 200
+              return Math.max(0, y(d.y));
+            } else if (d.depth == 2 && pp.classed('non-active')) {
+              return Math.max(0, y(d.y)-50);
+            } else if (d.depth == 0) {
+              return Math.max(0, y(d.y)-50);
             } else {
               return Math.max(0, y(d.y));
             }
@@ -62,14 +66,18 @@
               return Math.max(0, y(d.y + d.dy)-50);
             } else if (d.depth == 2) {
               return Math.max(0, y(d.y + d.dy) - 50);
+            } else if (d.depth == 1 && pp.classed('big-innerRing')) {
+              return Math.max(0, y(d.y + d.dy)-50);
             } else if (d.depth == 0) {
-              return 50;
+              return Math.max(0, y(d.y + d.dy) - 50);
             } else {
               return Math.max(0, y(d.y + d.dy));
             }
           } else {
             if (d.depth == 1 ) {
               return Math.max(0, y(d.y + d.dy));
+            } else if (d.depth == 0) {
+              return Math.max(0, y(d.y + d.dy) - 50);
             } else {
               return 250;
             }
@@ -447,9 +455,12 @@
 
         function click(d) {
 
-          var check = $(this).hasClass("non-active");
-          var checkinnerRing = $(this).hasClass("big-innerRing");
+          var check = d3.select('#path' + d.id).classed('non-active');
+          var checkinnerRing = d3.select('#path' + d.id).classed('big-innerRing');
+
+          // console.log(checkinnerRing);
           // console.log(check);
+          // console.log(checkinnerRing);
           // console.log('element', $(this));
 
           // innerRing clickable or not
@@ -555,7 +566,7 @@
 
                           var textWidth = selection.node().getBBox().width;
 
-                          if (textWidth > 80) {
+                          if (textWidth > 120) {
                             //  Array with every seperate word in it
                             var arr = e.name.split(" ");
 
@@ -569,7 +580,7 @@
 
                             console.log(lineOne, lineOne.length);
 
-                            if (lineOne.length > 10) {
+                            if (lineOne.length > 16) {
                               //  Array with every seperate word in it
                               arr = lineOne.split(" ");
 
@@ -670,9 +681,9 @@
                       var rotation = computeTextRotation(e);
                       if (d.depth == 1) {
                         if (e.depth == 2 && rotation > 90) {
-                          return -y(d.y + d.dy);
+                          return -y(d.y + d.dy) +50 ;
                         } else if (e.depth == 2) {
-                          return y(d.y + d.dy);
+                          return y(d.y + d.dy) - 50;
                         } 
                       }
 
@@ -783,7 +794,7 @@
       function arcTween(d) {
 
         if (d.depth == 1) {
-          radius = 250;
+          radius = 350;
           var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]);
             yd = d3.interpolate(y.domain(), [d.y, 1]);
             yr = d3.interpolate(y.range(), [d.y ? 0 : 0, radius]);
