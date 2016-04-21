@@ -5,6 +5,10 @@
   font-size: 18px !important;
 }
 
+.solidbio-graph {
+  font-family: 'Open-sans';
+}
+
 path {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -19,25 +23,25 @@ path {
 
 .innerRing {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 1em;
 }
 
 .outerRing {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 1em;
 }
 
 .data {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 1em;
 }
 
 .solid {
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  /*font-family: 'Montserrat', sans-serif;*/
   font-size: 0;
 }
 
@@ -59,6 +63,7 @@ path {
 
 text {
   pointer-events: none;
+  font-weight: 400;
 }
 
 #button-wrapper {
