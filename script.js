@@ -57,7 +57,11 @@
 
           if (pp[0][0] != null) {
             if (d.depth == 2 && pp.classed('arcSlices')) {
-              return 250;
+              return Math.max(0, y(d.y + d.dy)-50);
+            } else if (d.depth == 2 && pp.classed('non-active')) {
+              return Math.max(0, y(d.y + d.dy)-50);
+            } else if (d.depth == 2) {
+              return Math.max(0, y(d.y + d.dy) - 50);
             } else if (d.depth == 0) {
               return 50;
             } else {
