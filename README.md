@@ -1,5 +1,7 @@
 # SolidBio Graph
 
+Built during my internship at Unc Inc
+
 ## Overview
 
 Displays data from a JSON file in a sunburst graph.
